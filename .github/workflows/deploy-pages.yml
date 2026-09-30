@@ -40,6 +40,9 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
+      - name: Check public asset references
+        run: npm run check:assets
+
       - name: Build
         # Project pages are served from /<repo>/ — assets need that prefix.
         env:

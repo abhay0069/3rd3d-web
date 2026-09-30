@@ -2,15 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { HOTSPOTS, type Hotspot } from '../../data/salon'
 import { EASE_SILK } from '../../lib/motion'
+import { publicAsset } from '../../lib/assets'
 import { useBooking } from '../../store/booking'
 import { ParallaxMedia } from '../ui/ParallaxMedia'
 import { SectionHeading } from '../ui/Bits'
 import { Reveal } from '../ui/Reveal'
 
 const PLATES = [
-  { id: 'wide' as const, label: 'The Floor', src: '/img/salon-interior-wide.jpg', alt: 'The main styling floor' },
-  { id: 'colour' as const, label: 'Colour Studio', src: '/img/salon-color-studio.jpg', alt: 'The colour mixing studio' },
-  { id: 'bridal' as const, label: 'Bridal Suite', src: '/img/salon-bridal-suite.jpg', alt: 'The private bridal suite' },
+  { id: 'wide' as const, label: 'The Floor', src: publicAsset('/img/salon-interior-wide.jpg'), alt: 'The main styling floor' },
+  { id: 'colour' as const, label: 'Colour Studio', src: publicAsset('/img/salon-color-studio.jpg'), alt: 'The colour mixing studio' },
+  { id: 'bridal' as const, label: 'Bridal Suite', src: publicAsset('/img/salon-bridal-suite.jpg'), alt: 'The private bridal suite' },
 ]
 
 /**

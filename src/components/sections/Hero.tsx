@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { EASE_SILK } from '../../lib/motion'
+import { publicAsset } from '../../lib/assets'
 import { Magnetic } from '../ui/Magnetic'
 import { useBooking } from '../../store/booking'
 import { hasWebGL } from '../../lib/webgl'
@@ -57,7 +58,7 @@ export function Hero({
       >
         {/* Continuity plate: the same room, photographed. The 3D scene dissolves into it. */}
         <motion.img
-          src="/img/salon-interior-wide.jpg"
+          src={publicAsset('/img/salon-interior-wide.jpg')}
           alt="The LUMIÈRE styling floor: travertine, boucle chairs and brass-framed mirrors lit by late afternoon light"
           className="absolute inset-0 h-full w-full object-cover object-center"
           style={{ opacity: webglFailed ? 1 : photoOpacity }}
