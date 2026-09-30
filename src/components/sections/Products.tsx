@@ -24,7 +24,7 @@ export function Products({ tier }: { tier: DeviceTier }) {
   const product = PRODUCTS[index]
 
   return (
-    <section id="products" className="relative bg-ivory py-24 sm:py-28 lg:py-36">
+    <section id="products" className="relative bg-ivory py-28 text-charcoal sm:py-32 lg:py-40">
       <div className="container-editorial">
         <SectionHeading
           index="06"

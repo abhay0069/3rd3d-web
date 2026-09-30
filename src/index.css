@@ -1,8 +1,6 @@
-/* Latin subsets only — the rest of the world's glyphs would be dead weight here. */
-@import '@fontsource/cormorant-garamond/latin-300.css';
-@import '@fontsource/cormorant-garamond/latin-400.css';
-@import '@fontsource/cormorant-garamond/latin-500.css';
-@import '@fontsource/cormorant-garamond/latin-300-italic.css';
+/* Self-hosted, Latin glyphs only (the browser fetches just the subsets it needs). */
+@import '@fontsource-variable/bodoni-moda/opsz.css';
+@import '@fontsource-variable/bodoni-moda/opsz-italic.css';
 @import '@fontsource/jost/latin-300.css';
 @import '@fontsource/jost/latin-400.css';
 @import '@fontsource/jost/latin-500.css';
@@ -13,17 +11,26 @@
 
 @layer base {
   :root {
-    --ink: #0d0c0a;
-    --charcoal: #1a1917;
+    --ink: #0a0908;
+    --noir: #100e0c;
+    --char: #16130f;
     --ivory: #f7f3ec;
-    --porcelain: #fcfaf6;
-    --sand: #e9e1d4;
-    --beige: #d9ccb8;
-    --champagne: #c8a87c;
+    --paper: #f3ecdd;
+    --gold: #cdaa6e;
+    --gold-hi: #f3e0b5;
+    --gold-lo: #8c6c3b;
+    --champagne: #cdaa6e;
     --brass: #a9884e;
     --taupe: #8c8378;
     --nav-h: 76px;
-    color-scheme: light;
+    --wm-fs: clamp(3.3rem, 15.6vw, 17.5rem);
+    --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (max-width: 640px) {
+    :root {
+      --wm-fs: 18.6vw;
+    }
   }
 
   * {
@@ -35,12 +42,13 @@
     /* Offset anchor targets so the fixed navigation never covers a heading */
     scroll-padding-top: calc(var(--nav-h) + 12px);
     -webkit-text-size-adjust: 100%;
+    background-color: var(--ink);
   }
 
   body {
     margin: 0;
-    background-color: var(--ivory);
-    color: var(--charcoal);
+    background-color: var(--ink);
+    color: var(--paper);
     font-family: Jost, ui-sans-serif, system-ui, sans-serif;
     font-weight: 300;
     font-size: 16px;
@@ -61,9 +69,13 @@
   h2,
   h3,
   h4 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 300;
-    letter-spacing: -0.01em;
+    font-family: 'Bodoni Moda Variable', 'Bodoni Moda', Didot, Georgia, serif;
+    /* A fixed, sturdier optical size: at the automatic maximum the hairlines
+       are razor-thin and shimmer away on a dark background. */
+    font-optical-sizing: none;
+    font-variation-settings: 'opsz' 40;
+    font-weight: 400;
+    letter-spacing: -0.015em;
     margin: 0;
     text-wrap: balance;
   }
@@ -92,30 +104,30 @@
   }
 
   :focus-visible {
-    outline: 1.5px solid var(--champagne);
+    outline: 1.5px solid var(--gold);
     outline-offset: 3px;
     border-radius: 2px;
   }
 
   ::selection {
-    background: var(--champagne);
+    background: var(--gold);
     color: var(--ink);
   }
 
-  /* Elegant, quiet scrollbar */
+  /* Quiet, dark scrollbar */
   ::-webkit-scrollbar {
     width: 9px;
   }
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--ink);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(26, 25, 23, 0.22);
+    background: rgba(205, 170, 110, 0.28);
     border-radius: 999px;
-    border: 3px solid var(--ivory);
+    border: 3px solid var(--ink);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(26, 25, 23, 0.4);
+    background: rgba(205, 170, 110, 0.5);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -134,42 +146,47 @@
 }
 
 @layer components {
+  .font-display {
+    font-optical-sizing: none;
+    font-variation-settings: 'opsz' 40;
+  }
+
   .container-editorial {
     @apply mx-auto w-full max-w-[1400px] px-6 sm:px-8 lg:px-14;
   }
 
   .eyebrow {
-    @apply font-sans text-[10px] uppercase tracking-label text-taupe sm:text-[11px];
+    @apply font-sans text-[10px] uppercase tracking-label sm:text-[11px];
   }
 
   .display-xl {
-    @apply font-display text-[clamp(3.1rem,11.5vw,10.5rem)] leading-[0.88] tracking-[-0.02em];
+    @apply font-display text-[clamp(3.1rem,11.5vw,10.5rem)] leading-[0.9] tracking-[-0.025em];
   }
 
   .display-lg {
-    @apply font-display text-[clamp(2.4rem,6.4vw,5.4rem)] leading-[0.94] tracking-[-0.015em];
+    @apply font-display text-[clamp(2.5rem,6.2vw,5.6rem)] leading-[0.98] tracking-[-0.025em];
   }
 
   .display-md {
-    @apply font-display text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.05];
+    @apply font-display text-[clamp(1.75rem,3.4vw,2.9rem)] leading-[1.06] tracking-[-0.02em];
   }
 
   .rule {
-    @apply h-px w-full bg-charcoal/12;
+    @apply h-px w-full bg-current opacity-[0.14];
   }
 
   .glass {
     background: color-mix(in srgb, var(--ivory) 62%, transparent);
     backdrop-filter: blur(18px) saturate(1.25);
     -webkit-backdrop-filter: blur(18px) saturate(1.25);
-    border: 1px solid color-mix(in srgb, var(--charcoal) 8%, transparent);
+    border: 1px solid color-mix(in srgb, #1a1917 8%, transparent);
   }
 
   .glass-dark {
-    background: color-mix(in srgb, #14130f 46%, transparent);
+    background: color-mix(in srgb, #0a0908 58%, transparent);
     backdrop-filter: blur(20px) saturate(1.15);
     -webkit-backdrop-filter: blur(20px) saturate(1.15);
-    border: 1px solid rgba(247, 243, 236, 0.14);
+    border: 1px solid rgba(243, 224, 181, 0.14);
   }
 
   /* Buttons ---------------------------------------------------------------- */
@@ -179,6 +196,7 @@
       transition-[background-color,color,border-color,transform] duration-500 ease-silk;
   }
 
+  /* legacy light-surface buttons (booking flow, paper sections) */
   .btn-primary {
     @apply bg-charcoal text-ivory;
   }
@@ -186,7 +204,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(105deg, transparent 30%, rgba(200, 168, 124, 0.45) 50%, transparent 70%);
+    background: linear-gradient(105deg, transparent 30%, rgba(205, 170, 110, 0.45) 50%, transparent 70%);
     background-size: 220% 100%;
     opacity: 0;
     transition: opacity 0.6s ease;
@@ -211,6 +229,40 @@
   }
   .btn-light:hover {
     @apply border-ivory/70 bg-ivory/10;
+  }
+
+  /* noir & gold buttons */
+  .btn-gold {
+    color: #14100b;
+    background: linear-gradient(180deg, #ecd39e 0%, #cdaa6e 52%, #b38c4f 100%);
+    box-shadow:
+      0 0 0 1px rgba(243, 224, 181, 0.35) inset,
+      0 14px 40px -16px rgba(205, 170, 110, 0.55);
+  }
+  .btn-gold::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 32%, rgba(255, 250, 235, 0.65) 50%, transparent 68%);
+    background-size: 240% 100%;
+    background-position: 160% 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .btn-gold:hover::after {
+    opacity: 1;
+    animation: shimmer 1.5s linear infinite;
+  }
+  .btn-gold:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-line {
+    @apply border border-ivory/25 text-ivory;
+  }
+  .btn-line:hover {
+    border-color: rgba(243, 224, 181, 0.75);
+    background: rgba(243, 236, 221, 0.06);
   }
 
   .link-underline {
@@ -239,6 +291,7 @@
       placeholder:text-taupe/70 focus:border-champagne focus:outline-none;
   }
 
+  /* multiply grain for the light paper sections */
   .grain::before {
     content: '';
     position: absolute;
@@ -248,6 +301,106 @@
     opacity: 0.5;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+  }
+
+  /* ── The arch: LUMIÈRE's signature shape ─────────────────────────────── */
+  .arch {
+    border-radius: 999px 999px 0 0;
+  }
+  .arch-ring {
+    position: relative;
+  }
+  .arch-ring::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border: 1px solid var(--ring, rgba(205, 170, 110, 0.42));
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+  }
+
+  /* ── Gold foil text (vertical gradient, so it survives per-letter spans) ── */
+  .gold-foil {
+    color: transparent;
+    background-image: linear-gradient(180deg, #fff1cf 0%, #ecd29b 26%, #cdaa6e 56%, #9b7844 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  /* ── Film grain (animated by transform only, so it stays on the GPU) ───── */
+  .grain-layer {
+    position: absolute;
+    inset: -8%;
+    width: 116%;
+    height: 116%;
+    pointer-events: none;
+    opacity: 0.075;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1.1s steps(1) infinite;
+  }
+
+  /* ── Hero wordmark: every letter is "unlit brass" until the beam ignites it ──
+     Metrics (em, inside a line-height:1 box): baseline 0.865, cap-top 0.115, the
+     È accent rises 0.125 above the box. background-clip:text only paints inside
+     the element's box, so each letter gets 0.2em of padding-top to hold the accent. */
+  .wm {
+    font-family: 'Bodoni Moda Variable', 'Bodoni Moda', Didot, Georgia, serif;
+    font-optical-sizing: none;
+    font-variation-settings: 'opsz' 26;
+    font-weight: 500;
+    font-size: var(--wm-fs);
+    line-height: 1;
+    letter-spacing: 0.012em;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .wm-l {
+    position: relative;
+    display: inline-block;
+    padding-top: 0.2em;
+    margin-top: -0.2em;
+    color: transparent;
+    background-image: linear-gradient(
+      180deg,
+      #8a6c3e 0%,
+      #8a6c3e 26%,
+      #6b5230 52%,
+      #4a381f 78%,
+      #2f2312 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    will-change: transform, opacity;
+  }
+  .wm-l::after {
+    content: attr(data-ch);
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    color: transparent;
+    background-image: linear-gradient(
+      180deg,
+      #fff3d6 0%,
+      #fff3d6 26%,
+      #f2dba6 40%,
+      #d6b273 56%,
+      #a07c46 76%,
+      #82602f 90%,
+      #82602f 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    opacity: var(--lit, 0);
+  }
+  /* The glow filter exists only while a letter is actually hot (filters are costly). */
+  .wm-l.is-hot::after {
+    filter: brightness(calc(1 + var(--heat, 0) * 0.9))
+      drop-shadow(0 0 calc(var(--heat, 0) * 28px) rgba(255, 205, 128, calc(var(--heat, 0) * 0.9)));
+  }
+
+  /* Elements the intro timeline drives start hidden (JS reveals or skips them). */
+  [data-intro] {
+    opacity: 0;
   }
 }
 
@@ -289,6 +442,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .btn-primary::after,
+  .btn-gold::after,
+  .grain-layer,
   .animation-shimmer {
     animation: none !important;
   }

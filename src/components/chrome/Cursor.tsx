@@ -71,12 +71,12 @@ export function Cursor() {
     <div className="pointer-events-none fixed inset-0 z-[95] hidden md:block" aria-hidden="true">
       <div
         ref={ringRef}
-        className="absolute left-0 top-0 h-8 w-8 rounded-full border border-charcoal/35 opacity-0 mix-blend-difference transition-opacity duration-500"
+        className="absolute left-0 top-0 h-8 w-8 rounded-full border border-gold/70 opacity-0 transition-opacity duration-500"
         style={{ willChange: 'transform' }}
       />
       <span
         ref={dotRef}
-        className="absolute left-0 top-0 h-1 w-1 rounded-full bg-champagne opacity-0 transition-opacity duration-500"
+        className="absolute left-0 top-0 h-1 w-1 rounded-full bg-gold opacity-0 transition-opacity duration-500"
         style={{ willChange: 'transform' }}
       />
     </div>

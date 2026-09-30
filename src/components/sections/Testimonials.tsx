@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { SITE, TESTIMONIALS } from '../../data/salon'
 import { EASE_SILK } from '../../lib/motion'
 import { SectionHeading, Stars } from '../ui/Bits'
-import { Reveal } from '../ui/Reveal'
+import { Counter, Reveal } from '../ui/Reveal'
 import { useInView } from '../../hooks/useResponsive'
 
 const ROTATE_MS = 7600
@@ -32,7 +32,7 @@ export function Testimonials() {
   return (
     <section
       id="reviews"
-      className="relative bg-ink py-24 text-ivory sm:py-28 lg:py-36"
+      className="relative bg-noir py-28 text-ivory sm:py-32 lg:py-40"
       aria-labelledby="reviews-title"
     >
       <div className="container-editorial">
@@ -148,8 +148,8 @@ export function Testimonials() {
               <dt className="font-sans text-[10px] uppercase tracking-label text-ivory/45">
                 {s.label}
               </dt>
-              <dd className="mt-3 font-display text-[clamp(2rem,4vw,3rem)] leading-none text-champagne">
-                {s.value}
+              <dd className="mt-3 font-display text-[clamp(2.2rem,4.4vw,3.4rem)] leading-none text-gold-hi">
+                <Counter value={s.value} />
               </dd>
               <p className="mt-2 font-sans text-[11px] text-ivory/40">{s.detail}</p>
             </Reveal>

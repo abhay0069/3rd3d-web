@@ -20,7 +20,13 @@ export function Stars({ value = 5, className = '' }: { value?: number; className
   )
 }
 
-/** The recurring editorial section header: index, eyebrow, big serif line. */
+/**
+ * The recurring editorial section header: index, eyebrow, a big Didone line.
+ *
+ * `tone="light"` is for dark sections (ivory type, gold accents);
+ * `tone="dark"` is for the ivory paper interludes (ink type, brass accents).
+ * Any <em> inside `lines` picks up the accent automatically.
+ */
 export function SectionHeading({
   index,
   eyebrow,
@@ -41,23 +47,25 @@ export function SectionHeading({
   as?: 'h2' | 'h3'
 }) {
   const Heading = as
+  const light = tone === 'light'
   return (
-    <div
-      className={`${align === 'center' ? 'mx-auto max-w-2xl text-center' : 'max-w-3xl'} ${className}`}
-    >
+    <div className={`${align === 'center' ? 'mx-auto max-w-2xl text-center' : 'max-w-3xl'} ${className}`}>
       <Reveal y={14}>
         <div
           className={`flex items-center gap-4 ${align === 'center' ? 'justify-center' : ''} ${
-            tone === 'light' ? 'text-ivory/60' : 'text-taupe'
+            light ? 'text-gold' : 'text-brass'
           }`}
         >
           {index && <span className="font-sans text-[10px] tracking-label">{index}</span>}
-          <span className="eyebrow">{eyebrow}</span>
+          <span aria-hidden className="h-px w-10 bg-current opacity-60" />
+          <span className="eyebrow !text-current opacity-90">{eyebrow}</span>
         </div>
       </Reveal>
 
       <Heading
-        className={`display-lg mt-5 ${tone === 'light' ? 'text-ivory' : 'text-charcoal'}`}
+        className={`display-lg mt-6 ${
+          light ? 'text-ivory [&_em]:text-gold-hi' : 'text-charcoal [&_em]:text-brass'
+        } [&_em]:italic`}
       >
         <RevealLines lines={lines} />
       </Heading>
@@ -65,16 +73,18 @@ export function SectionHeading({
       {intro && (
         <Reveal delay={0.15}>
           <p
-            className={`mt-6 max-w-xl text-[15px] leading-relaxed ${
-              align === 'center' ? 'mx-auto' : ''
-            } ${tone === 'light' ? 'text-ivory/70' : 'text-smoke'}`}
+            className={`mt-7 max-w-xl text-[15px] leading-relaxed ${align === 'center' ? 'mx-auto' : ''} ${
+              light ? 'text-ivory/65' : 'text-smoke'
+            }`}
           >
             {intro}
           </p>
         </Reveal>
       )}
 
-      <RevealRule delay={0.25} className={`mt-8 ${tone === 'light' ? '!bg-ivory/25' : ''}`} />
+      <div className={light ? 'text-ivory' : 'text-charcoal'}>
+        <RevealRule delay={0.25} className="mt-9" />
+      </div>
     </div>
   )
 }

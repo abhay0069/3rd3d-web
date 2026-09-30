@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { NAV_LINKS, SITE } from '../../data/salon'
 import { useBooking } from '../../store/booking'
+import { useIntro } from '../../store/intro'
 import { useScrollLock } from '../../hooks/useResponsive'
 import { EASE_SILK } from '../../lib/motion'
 import { Magnetic } from '../ui/Magnetic'
@@ -54,71 +55,70 @@ function useActiveSection() {
 export function Nav() {
   const scrolled = useScrolled(60)
   const active = useActiveSection()
+  const navIn = useIntro((s) => s.navIn)
+  const reduced = useReducedMotion()
   const [menuOpen, setMenuOpen] = useState(false)
   const openBooking = useBooking((s) => s.open)
   useScrollLock(menuOpen)
 
-  const go = useCallback(
-    (href: string) => {
-      setMenuOpen(false)
-      const el = document.querySelector(href)
-      if (!el) return
-      if (typeof el.scrollIntoView === 'function') {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      } else {
-        window.scrollTo({ top: (el as HTMLElement).offsetTop, behavior: 'smooth' })
-      }
-    },
-    [],
-  )
+  const go = useCallback((href: string) => {
+    setMenuOpen(false)
+    const el = document.querySelector(href)
+    if (!el) return
+    if (typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    } else {
+      window.scrollTo({ top: (el as HTMLElement).offsetTop, behavior: 'smooth' })
+    }
+  }, [])
 
   return (
     <>
       <a
         href="#services"
-        className="sr-only-focusable fixed left-4 top-4 z-[100] rounded-full bg-charcoal px-4 py-2 text-[11px] uppercase tracking-wide2 text-ivory"
+        className="sr-only-focusable fixed left-4 top-4 z-[100] rounded-full bg-gold px-4 py-2 text-[11px] uppercase tracking-wide2 text-ink"
       >
         Skip to content
       </a>
 
       <motion.header
         className="fixed inset-x-0 top-0 z-[70]"
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, ease: EASE_SILK, delay: 0.35 }}
+        initial={reduced ? { opacity: 0 } : { y: -28, opacity: 0 }}
+        animate={navIn ? { y: 0, opacity: 1 } : reduced ? { opacity: 0 } : { y: -28, opacity: 0 }}
+        transition={{ duration: reduced ? 0.25 : 1.1, ease: EASE_SILK }}
+        style={{ pointerEvents: navIn ? 'auto' : 'none' }}
       >
         <div
-          className={`transition-all duration-700 ease-silk ${
+          className={`bg-origin-border transition-all duration-700 ease-silk ${
             scrolled
-              ? 'border-b border-charcoal/8 bg-ivory/75 backdrop-blur-xl backdrop-saturate-150'
-              : 'border-b border-transparent bg-transparent'
+              ? 'border-b border-gold/15 bg-ink/70 backdrop-blur-xl backdrop-saturate-150'
+              : 'border-b border-transparent bg-gradient-to-b from-ink/70 to-transparent'
           }`}
         >
           <nav
-            className="container-editorial flex items-center justify-between gap-6"
-            style={{ height: scrolled ? 64 : 78, transition: 'height 0.6s cubic-bezier(0.22,1,0.36,1)' }}
+            className="container-editorial flex items-center justify-between gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]"
+            style={{ height: scrolled ? 64 : 82, transition: 'height 0.6s cubic-bezier(0.22,1,0.36,1)' }}
             aria-label="Primary"
           >
-            {/* Wordmark */}
+            {/* Wordmark — stays out of the way while the hero's giant name is on screen */}
             <a
               href="#home"
               onClick={(e) => {
                 e.preventDefault()
                 go('#home')
               }}
-              className="group flex flex-col leading-none"
+              className={`group flex flex-col leading-none transition-opacity duration-700 focus-visible:opacity-100 ${
+                scrolled ? 'opacity-100' : 'opacity-0'
+              }`}
               aria-label={`${SITE.name} home`}
             >
-              <span className="font-display text-[22px] tracking-[0.22em] text-charcoal transition-opacity duration-500 group-hover:opacity-70 sm:text-[24px]">
+              <span className="font-display text-[21px] font-medium tracking-[0.3em] text-ivory transition-colors duration-500 group-hover:text-gold-hi sm:text-[23px]">
                 {SITE.name}
-              </span>
-              <span className="mt-1 hidden font-sans text-[8px] uppercase tracking-label text-taupe sm:block">
-                {SITE.tagline}
               </span>
             </a>
 
             {/* Desktop links */}
-            <ul className="hidden items-center gap-7 lg:flex">
+            <ul className="hidden items-center gap-8 lg:flex">
               {NAV_LINKS.map((link) => {
                 const isActive = active === link.href
                 return (
@@ -129,7 +129,9 @@ export function Nav() {
                         e.preventDefault()
                         go(link.href)
                       }}
-                      className="link-underline font-sans text-[11px] uppercase tracking-wide2 text-charcoal/80 transition-colors duration-400 hover:text-charcoal"
+                      className={`link-underline font-sans text-[11px] uppercase tracking-wide2 transition-colors duration-500 hover:text-gold-hi ${
+                        isActive ? 'text-gold' : 'text-ivory/70'
+                      }`}
                       aria-current={isActive ? 'true' : undefined}
                     >
                       {link.label}
@@ -140,10 +142,10 @@ export function Nav() {
             </ul>
 
             {/* Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-end gap-4">
               <a
                 href={SITE.phoneHref}
-                className="hidden font-sans text-[11px] tracking-wide2 text-smoke transition-colors hover:text-charcoal xl:block"
+                className="hidden font-sans text-[11px] tracking-wide2 text-ivory/60 transition-colors hover:text-gold-hi xl:block"
               >
                 {SITE.phone}
               </a>
@@ -153,7 +155,7 @@ export function Nav() {
                   type="button"
                   onClick={() => openBooking()}
                   data-cursor="hover"
-                  className="btn btn-primary !px-6 !py-3"
+                  className="btn btn-gold !px-6 !py-3"
                 >
                   Book now
                 </button>
@@ -169,12 +171,12 @@ export function Nav() {
               >
                 <span className="relative block h-3 w-6">
                   <span
-                    className={`absolute left-0 block h-px w-6 bg-charcoal transition-all duration-500 ease-silk ${
+                    className={`absolute left-0 block h-px w-6 bg-ivory transition-all duration-500 ease-silk ${
                       menuOpen ? 'top-1.5 rotate-45' : 'top-0'
                     }`}
                   />
                   <span
-                    className={`absolute left-0 block h-px w-6 bg-charcoal transition-all duration-500 ease-silk ${
+                    className={`absolute left-0 block h-px w-6 bg-ivory transition-all duration-500 ease-silk ${
                       menuOpen ? 'top-1.5 -rotate-45' : 'top-3'
                     }`}
                   />
@@ -197,7 +199,7 @@ export function Nav() {
             transition={{ duration: 0.7, ease: EASE_SILK }}
           >
             <nav aria-label="Mobile">
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 {NAV_LINKS.map((link, i) => (
                   <motion.li
                     key={link.href}
@@ -211,8 +213,11 @@ export function Nav() {
                         e.preventDefault()
                         go(link.href)
                       }}
-                      className="block py-1 font-display text-[12vw] leading-[1.12] tracking-tight text-ivory/90 transition-colors duration-400 hover:text-champagne sm:text-[9vw]"
+                      className="flex items-baseline gap-4 py-1 font-display text-[11.5vw] leading-[1.12] tracking-tight text-ivory/90 transition-colors duration-400 hover:text-gold sm:text-[8.5vw]"
                     >
+                      <span className="font-sans text-[10px] tracking-label text-gold/70">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
                       {link.label}
                     </a>
                   </motion.li>
@@ -221,7 +226,7 @@ export function Nav() {
             </nav>
 
             <motion.div
-              className="mt-12 space-y-4 border-t border-ivory/15 pt-8"
+              className="mt-12 space-y-4 border-t border-gold/20 pt-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.7 }}
@@ -232,7 +237,7 @@ export function Nav() {
                   setMenuOpen(false)
                   openBooking()
                 }}
-                className="btn btn-light w-full"
+                className="btn btn-gold w-full"
               >
                 Book appointment
               </button>

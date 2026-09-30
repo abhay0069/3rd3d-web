@@ -39,9 +39,9 @@
     <meta name="twitter:image" content="https://lumiere-salon.example/img/salon-interior-wide.jpg" />
 
     <!-- Fonts are self-hosted via @fontsource (no third-party requests) -->
-    <!-- The hero photograph doubles as the 3D scene's exit plate, so it is
-         fetched at high priority from the very first byte. -->
-    <link rel="preload" as="image" href="/img/salon-interior-wide.jpg" fetchpriority="high" />
+    <!-- The hero portrait is fetched at high priority from the very first byte:
+         the opening sequence waits (briefly) for it, then plays. -->
+    <link rel="preload" as="image" href="/img/face-particles.jpg" fetchpriority="high" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -111,7 +111,7 @@
   <body>
     <div id="root"></div>
     <noscript>
-      <div style="padding: 48px; font-family: Georgia, serif; background: #f7f3ec; color: #1a1917">
+      <div style="padding: 48px; font-family: Georgia, serif; background: #0a0908; color: #f3ecdd">
         <h1>LUMIÈRE — Luxury Hair &amp; Beauty Studio</h1>
         <p>Hair. Beauty. Confidence. Designed around you.</p>
         <p>Please enable JavaScript for the full experience, or call us on +91 22 4000 1180 to book.</p>

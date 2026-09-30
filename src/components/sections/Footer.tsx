@@ -8,12 +8,12 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative overflow-hidden bg-charcoal pb-32 pt-20 text-ivory md:pb-16">
+    <footer className="relative overflow-hidden border-t border-gold/15 bg-ink pb-32 pt-24 text-ivory md:pb-16">
       <div className="container-editorial">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr] lg:gap-16">
           <div>
             <Reveal y={16}>
-              <p className="font-display text-[clamp(2.6rem,7vw,4.5rem)] leading-[0.95] tracking-[0.18em] text-ivory">
+              <p className="gold-foil font-display text-[clamp(2.6rem,7vw,4.5rem)] leading-[1.1] tracking-[0.16em] [font-variation-settings:'opsz'_26]">
                 {SITE.name}
               </p>
               <p className="mt-3 font-sans text-[10px] uppercase tracking-label text-ivory/45">
@@ -29,7 +29,7 @@ export function Footer() {
             </Reveal>
 
             <Magnetic strength={0.16}>
-              <button type="button" onClick={() => openBooking()} className="btn btn-light mt-9">
+              <button type="button" onClick={() => openBooking()} className="btn btn-gold mt-9">
                 Book appointment
               </button>
             </Magnetic>
@@ -113,7 +113,7 @@ export function Footer() {
       {/* A last, quiet flourish: the wordmark bleeding off the edge */}
       <p
         aria-hidden
-        className="pointer-events-none select-none whitespace-nowrap text-center font-display text-[22vw] leading-[0.8] tracking-[0.12em] text-ivory/[0.035]"
+        className="gold-foil pointer-events-none mt-6 select-none whitespace-nowrap text-center font-display text-[19vw] leading-[0.82] tracking-[0.02em] opacity-[0.09] [font-variation-settings:'opsz'_26]"
       >
         LUMIÈRE
       </p>
