@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "LUMI\u00c8RE \u2014 a cinematic 3D website for a modern luxury salon & beauty studio.",
+  "description": "LUMIÈRE — a cinematic 3D website for a modern luxury salon & beauty studio.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -22,6 +22,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@types/node": "^22.20.4",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.169.0",

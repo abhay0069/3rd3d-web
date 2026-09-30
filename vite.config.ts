@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ isSsrBuild }) => ({
+  // '/' everywhere except GitHub Pages, which serves project sites from /<repo>/.
+  base: process.env.VITE_BASE ?? '/',
   plugins: [react()],
   server: {
     host: '0.0.0.0',
