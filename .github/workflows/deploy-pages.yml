@@ -1,5 +1,13 @@
 name: Deploy to GitHub Pages
 
+# Publishes the site to https://<owner>.github.io/<repo>/
+#
+# GitHub Pages must be enabled once for this repository:
+#   Settings → Pages → Build and deployment → Source: GitHub Actions
+# After that this workflow deploys on every push to main. Until it is enabled,
+# the build job still runs green and only the deploy job is skipped/failed —
+# nothing about the code depends on it.
+
 on:
   push:
     branches: [main]
@@ -41,13 +49,6 @@ jobs:
       - name: Add a 404 fallback so deep links resolve
         run: cp dist/index.html dist/404.html
 
-      - name: Configure Pages (enable on first run)
-        uses: actions/configure-pages@v5
-        with:
-          # Lets the workflow's own token switch Pages on if the repo has not
-          # published before, so the first push deploys without a manual step.
-          enablement: true
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -59,5 +60,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Deploy
+        id: deployment
         uses: actions/deploy-pages@v4

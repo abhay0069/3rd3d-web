@@ -74,6 +74,7 @@ export function Hero({
                   tier={tier}
                   reduced={reduced}
                   onFirstFrame={onSceneReady}
+                  onContextLost={() => setWebglFailed(true)}
                 />
               </Suspense>
             </CanvasBoundary>

@@ -16,11 +16,13 @@ export default function HeroScene({
   tier,
   reduced,
   onFirstFrame,
+  onContextLost,
 }: {
   started: boolean
   tier: DeviceTier
   reduced: boolean
   onFirstFrame?: () => void
+  onContextLost?: () => void
 }) {
   const [dpr, setDpr] = useState(tier === 'high' ? 1.75 : 1.35)
   const particleCount = tier === 'high' ? 1500 : tier === 'medium' ? 800 : 320
@@ -44,6 +46,10 @@ export default function HeroScene({
         scene.background = new THREE.Color('#E7DCC9')
         // Signal that the WebGL context is alive so the loader can hand over.
         onFirstFrame?.()
+        // A driver reset or GPU eviction mid-visit must not leave a blank hero.
+        gl.domElement.addEventListener('webglcontextlost', () => onContextLost?.(), {
+          passive: true,
+        })
       }}
     >
       <fog attach="fog" args={['#E3D8C5', 12, 40]} />
