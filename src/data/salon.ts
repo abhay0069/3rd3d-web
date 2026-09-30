@@ -6,6 +6,8 @@
  * file with your real details before launch — nothing is hard-coded in components.
  */
 
+import { publicAsset } from '../lib/assets'
+
 export type ServiceCategory = 'hair' | 'beauty' | 'bridal'
 
 export interface Service {
@@ -89,10 +91,10 @@ export const CATEGORIES: Category[] = [
 ]
 
 const IMG = {
-  hair: '/img/service-hair.jpg',
-  beauty: '/img/service-beauty.jpg',
-  bridal: '/img/service-bridal.jpg',
-  detail: '/img/gallery-1.jpg',
+  hair: publicAsset('/img/service-hair.jpg'),
+  beauty: publicAsset('/img/service-beauty.jpg'),
+  bridal: publicAsset('/img/service-bridal.jpg'),
+  detail: publicAsset('/img/gallery-1.jpg'),
 }
 
 export const SERVICES: Service[] = [
@@ -266,7 +268,7 @@ export const EXPERTS: Expert[] = [
     experience: '12+ years',
     specialty: 'Precision cutting · Colour architecture',
     bio: 'Trained in London and Milan, Arjun builds shapes around how hair moves — never around a trend board. He leads our cutting and colour education.',
-    image: '/img/expert-1.jpg',
+    image: publicAsset('/img/expert-1.jpg'),
     services: ['hair'],
   },
   {
@@ -276,7 +278,7 @@ export const EXPERTS: Expert[] = [
     experience: '9 years',
     specialty: 'Advanced skin · Corrective facials',
     bio: 'A clinical aesthetician by training, Meera reads skin before she treats it. Her protocols are slow, evidence-led and results you can see in daylight.',
-    image: '/img/expert-2.jpg',
+    image: publicAsset('/img/expert-2.jpg'),
     services: ['beauty'],
   },
   {
@@ -286,7 +288,7 @@ export const EXPERTS: Expert[] = [
     experience: '8 years',
     specialty: 'Bridal hair · Editorial makeup',
     bio: 'Anaya has dressed over two hundred brides. She plans a wedding look backwards from the last photograph of the night, so nothing moves.',
-    image: '/img/expert-3.jpg',
+    image: publicAsset('/img/expert-3.jpg'),
     services: ['bridal', 'beauty'],
   },
 ]
@@ -313,7 +315,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Timeless · Polished',
     description:
       'A glossy blowout, a low chignon, skin that looks like skin. Elegant at forty as it was at twenty.',
-    image: '/img/look-classic.jpg',
+    image: publicAsset('/img/look-classic.jpg'),
     palette: { base: '#F7F3EC', surface: '#E9E1D4', text: '#1A1917', accent: '#A9884E' },
     typeStyle: { tracking: '0.02em', italic: false },
     services: ['haircut', 'hair-styling', 'hair-colour', 'makeup'],
@@ -324,7 +326,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Architectural · Clean',
     description:
       'A blunt bob, glass-smooth lengths, a graphic line of liner. Sharp where it matters, quiet everywhere else.',
-    image: '/img/look-modern.jpg',
+    image: publicAsset('/img/look-modern.jpg'),
     palette: { base: '#EFEDE9', surface: '#D8D4CE', text: '#141413', accent: '#8C8378' },
     typeStyle: { tracking: '-0.02em', italic: false },
     services: ['haircut', 'hair-colour', 'brows', 'makeup'],
@@ -335,7 +337,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Dramatic · Warm',
     description:
       'Volume, copper and a deep berry lip. For the evenings you want to be remembered for.',
-    image: '/img/look-bold.jpg',
+    image: publicAsset('/img/look-bold.jpg'),
     palette: { base: '#1A1714', surface: '#2A2420', text: '#F7F3EC', accent: '#C8A87C' },
     typeStyle: { tracking: '0.01em', italic: true },
     services: ['hair-colour', 'highlights', 'makeup', 'lashes'],
@@ -346,7 +348,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Undone · Radiant',
     description:
       'Air-dried texture, a warm gloss, bare skin with a lit-from-within finish. Nothing heavy, nothing hidden.',
-    image: '/img/look-natural.jpg',
+    image: publicAsset('/img/look-natural.jpg'),
     palette: { base: '#F3EDE3', surface: '#E2D7C6', text: '#26221C', accent: '#B08D5E' },
     typeStyle: { tracking: '0.03em', italic: false },
     services: ['hair-treatment', 'facial', 'brows', 'pre-bridal'],
@@ -356,8 +358,8 @@ export const LOOKS: Look[] = [
 /* ── Before / After ───────────────────────────────────────────────────── */
 
 export const TRANSFORMATION = {
-  before: '/img/before.jpg',
-  after: '/img/after.jpg',
+  before: publicAsset('/img/before.jpg'),
+  after: publicAsset('/img/after.jpg'),
   beforeAlt:
     'Before: dry, flat, unstyled hair photographed in cool, unflattering consultation light',
   afterAlt:

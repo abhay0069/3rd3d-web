@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { EXPERTS } from '../../data/salon'
+import { publicAsset } from '../../lib/assets'
 import { useBooking } from '../../store/booking'
 import { SectionHeading } from '../ui/Bits'
 import { Reveal } from '../ui/Reveal'
@@ -92,7 +93,7 @@ export function About() {
           <Reveal>
             <div className="relative aspect-[4/5] overflow-hidden bg-sand">
               <img
-                src="/img/salon-bridal-suite.jpg"
+                src={publicAsset('/img/salon-bridal-suite.jpg')}
                 alt="The curtained bridal suite at LUMIÈRE, with a chaise, arch mirror and silk curtains"
                 loading="lazy"
                 decoding="async"

@@ -72,6 +72,14 @@ Both scale by device tier (2,400 → 320 points) and respect `prefers-reduced-mo
 - All scroll/pointer listeners are passive and rAF-coalesced; the 3D layer reads
   shared mutable state, never React state, inside the render loop.
 
+### GitHub Pages assets
+
+The site is published as a project site under `/<repo>/`, not at the host root.
+Use `publicAsset()` from `src/lib/assets.ts` for files in `public/` referenced by
+React; a literal `/img/...` bypasses Vite's base path and points outside the
+published site. Font files are imported from `@fontsource` and rewritten by Vite
+with the same base path during the Pages build.
+
 ### Accessibility
 Semantic landmarks and a real heading hierarchy (one `h1`, ten `h2`, `h3` per
 service/stylist), the slider as an actual ARIA slider with arrow-key support, a

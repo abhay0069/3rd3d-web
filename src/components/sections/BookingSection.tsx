@@ -1,4 +1,5 @@
 import { SITE } from '../../data/salon'
+import { publicAsset } from '../../lib/assets'
 import { BookingFlow } from '../booking/BookingFlow'
 import { SectionHeading } from '../ui/Bits'
 import { Reveal } from '../ui/Reveal'
@@ -31,7 +32,7 @@ export function BookingSection() {
           <aside className="flex flex-col gap-8">
             <div className="relative aspect-[5/4] overflow-hidden bg-sand lg:aspect-[4/3]">
               <img
-                src="/img/salon-color-studio.jpg"
+                src={publicAsset('/img/salon-color-studio.jpg')}
                 alt="Colour mixing at the LUMIÈRE studio: amber glass bottles, brass bowls and folded towels on travertine"
                 loading="lazy"
                 decoding="async"
