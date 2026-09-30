@@ -24,9 +24,12 @@ export default defineConfig(({ isSsrBuild }) => ({
       output: isSsrBuild
         ? undefined
         : {
+            // Only framer-motion is pinned (every page load needs it). three / R3F are
+            // deliberately NOT listed: pinning them into named chunks made the entry chunk
+            // import them statically, so every visitor downloaded ~1 MB of 3D code the
+            // hero never uses. Left to Rollup they split on the lazy() boundaries
+            // (particle portrait, product stage) and load only when those scroll into view.
             manualChunks: {
-              three: ['three'],
-              r3f: ['@react-three/fiber', '@react-three/drei'],
               motion: ['framer-motion'],
             },
           },
