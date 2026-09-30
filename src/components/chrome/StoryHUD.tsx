@@ -14,6 +14,7 @@ export function StoryHUD() {
   const openBooking = useBooking((s) => s.open)
 
   const activeChapterInfo = CHAPTERS[chapterIndex] || CHAPTERS[0]
+  const pct = Math.round(scrollProgress * 100)
 
   const scrollToChapter = (id: string) => {
     sound.playClick()
@@ -28,7 +29,7 @@ export function StoryHUD() {
     <>
       {/* Top HUD Bar */}
       <header className="pointer-events-none fixed inset-x-0 top-0 z-[90] flex items-center justify-between px-6 py-6 sm:px-10 lg:px-14">
-        {/* Monogram */}
+        {/* Monogram Brand */}
         <div className="pointer-events-auto">
           <button
             type="button"
@@ -36,29 +37,37 @@ export function StoryHUD() {
             className="group flex flex-col items-start text-left focus:outline-none"
             aria-label="Return to beginning"
           >
-            <span className="font-display text-[18px] font-medium tracking-[0.28em] text-[#f7f3ec] transition-colors duration-500 group-hover:text-gold sm:text-[20px]">
-              LUMIÈRE
-            </span>
-            <span className="font-sans text-[8.5px] uppercase tracking-[0.28em] text-gold/70">
-              Bandra West · Studio
+            <div className="flex items-center gap-2">
+              <span className="font-display text-[19px] font-medium tracking-[0.24em] text-[#f7f3ec] transition-colors duration-500 group-hover:text-gold sm:text-[21px]">
+                LUMIÈRE
+              </span>
+              <span className="text-[10px] text-gold-hi opacity-80 group-hover:rotate-45 transition-transform duration-500">
+                ✦
+              </span>
+            </div>
+            <span className="font-sans text-[8.5px] uppercase tracking-[0.3em] text-gold/75">
+              ATELIER BANDRA WEST · 2026
             </span>
           </button>
         </div>
 
-        {/* Center Chapter Teleport Pill */}
+        {/* Center Chapter Teleport Pill (Noomo style with real-time percentage) */}
         <div className="pointer-events-auto hidden md:block">
           <button
             type="button"
             onClick={() => setQuickNavOpen(!quickNavOpen)}
-            className="group flex items-center gap-3 rounded-full border border-gold/25 bg-ink/75 px-5 py-2 backdrop-blur-xl transition-all duration-500 hover:border-gold hover:bg-ink/90"
+            className="group flex items-center gap-3 rounded-full border border-gold/30 bg-[#0a0a0c]/80 px-5 py-2 backdrop-blur-2xl transition-all duration-500 hover:border-gold hover:bg-[#0a0a0c]/95 shadow-[0_4px_25px_rgba(0,0,0,0.6)]"
             aria-label="Open Chapter Index"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
             <span className="font-sans text-[10px] tracking-[0.24em] text-ivory/60 group-hover:text-ivory">
-              CHAPTER {activeChapterInfo.num} / 08
+              {activeChapterInfo.num} / 08
             </span>
-            <span className="font-display text-[13px] italic tracking-wide text-gold-hi">
+            <span className="font-display text-[13.5px] italic tracking-wide text-gold-hi">
               {activeChapterInfo.title}
+            </span>
+            <span className="font-sans text-[9px] text-ivory/40">
+              {pct}%
             </span>
             <svg
               viewBox="0 0 16 16"
@@ -74,42 +83,40 @@ export function StoryHUD() {
           </button>
         </div>
 
-        {/* Right Controls: Sound & Menu */}
+        {/* Right Controls: Sound & Index */}
         <div className="pointer-events-auto flex items-center gap-3 sm:gap-4">
-          {/* Procedural Soundscape Toggle */}
+          {/* Procedural Soundscape Toggle with animated sound wave bars */}
           <button
             type="button"
             onClick={toggleSound}
-            className={`group flex items-center gap-2 rounded-full border px-4 py-2 font-sans text-[10px] uppercase tracking-wide2 backdrop-blur-lg transition-all duration-500 ${
+            className={`group flex items-center gap-2.5 rounded-full border px-4 py-2 font-sans text-[10px] uppercase tracking-wide2 backdrop-blur-2xl transition-all duration-500 ${
               soundEnabled
                 ? 'border-gold bg-gold/15 text-gold-hi shadow-[0_0_20px_rgba(205,170,110,0.3)]'
-                : 'border-ivory/20 bg-ink/60 text-ivory/60 hover:border-ivory/50 hover:text-ivory'
+                : 'border-ivory/20 bg-[#0a0a0c]/70 text-ivory/60 hover:border-ivory/50 hover:text-ivory'
             }`}
             aria-label={soundEnabled ? 'Mute procedural soundscape' : 'Enable procedural soundscape'}
           >
-            <span
-              className={`flex h-2 w-2 items-center justify-center ${
-                soundEnabled ? 'text-gold' : 'text-ivory/40'
-              }`}
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3 w-3">
-                {soundEnabled ? (
-                  <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77zm-2.5-1.23L6 6H2v12h4l5.5 4V2z" />
-                ) : (
-                  <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-                )}
+            {soundEnabled ? (
+              <div className="flex items-end gap-[2px] h-3 w-3">
+                <span className="w-[2px] bg-gold-hi rounded-full animate-[pulse_0.6s_ease-in-out_infinite] h-full" />
+                <span className="w-[2px] bg-gold-hi rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-2/3" />
+                <span className="w-[2px] bg-gold-hi rounded-full animate-[pulse_0.75s_ease-in-out_infinite] h-4/5" />
+              </div>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-3 w-3 opacity-60">
+                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
               </svg>
-            </span>
+            )}
             <span className="hidden xs:inline">
-              {soundEnabled ? 'SOUND: ON' : 'SOUND: OFF'}
+              {soundEnabled ? 'AUDIO: ON' : 'AUDIO: OFF'}
             </span>
           </button>
 
-          {/* Chapter drawer trigger */}
+          {/* Chapter Index Trigger */}
           <button
             type="button"
             onClick={() => setQuickNavOpen(!quickNavOpen)}
-            className="flex items-center gap-2 rounded-full border border-ivory/20 bg-ink/70 px-4 py-2 font-sans text-[10px] uppercase tracking-wide2 text-ivory/80 backdrop-blur-lg transition-all duration-500 hover:border-gold hover:text-gold-hi"
+            className="flex items-center gap-2 rounded-full border border-ivory/20 bg-[#0a0a0c]/70 px-4 py-2 font-sans text-[10px] uppercase tracking-wide2 text-ivory/80 backdrop-blur-2xl transition-all duration-500 hover:border-gold hover:text-gold-hi"
             aria-label="Toggle Chapter Navigation"
           >
             <span>INDEX</span>
@@ -154,7 +161,7 @@ export function StoryHUD() {
       <div className="pointer-events-none fixed left-0 top-0 z-[100] h-[2px] w-full bg-ivory/10">
         <div
           className="h-full bg-gradient-to-r from-gold-lo via-gold to-gold-hi transition-all duration-150 ease-out"
-          style={{ width: `${Math.round(scrollProgress * 100)}%` }}
+          style={{ width: `${pct}%` }}
         />
       </div>
 
@@ -166,12 +173,15 @@ export function StoryHUD() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[110] flex flex-col justify-between bg-ink/95 px-8 py-12 backdrop-blur-2xl sm:px-16 lg:px-24"
+            className="fixed inset-0 z-[110] flex flex-col justify-between bg-[#0a0a0c]/96 px-8 py-12 backdrop-blur-3xl sm:px-16 lg:px-24"
           >
             <div className="flex items-center justify-between border-b border-gold/20 pb-6">
-              <span className="font-sans text-[11px] uppercase tracking-[0.3em] text-gold">
-                THE STORY COMPASS · 8 CHAPTERS
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-gold text-[12px]">✦</span>
+                <span className="font-sans text-[11px] uppercase tracking-[0.3em] text-gold">
+                  THE STORY COMPASS · 8 CHAPTERS
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={() => setQuickNavOpen(false)}

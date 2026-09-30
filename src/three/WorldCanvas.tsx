@@ -1,355 +1,490 @@
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Suspense, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { pointer, smoothPointer } from '../lib/pointer'
 import { useStory, type Mood } from '../store/story'
 
-/** Mood lighting palette configuration */
+/** Chromatic luxury lighting palettes for each story mood */
 const MOOD_PALETTES: Record<
   Mood,
-  { keyLight: string; rimLight: string; ambient: string; sculpture: string; roughness: number; metalness: number }
+  {
+    keyLight: string
+    rimLight: string
+    fillLight: string
+    coreColor: string
+    glassColor: string
+    glassAttenuation: string
+    dispersion: number
+    roughness: number
+    ior: number
+  }
 > = {
   noir: {
-    keyLight: '#f6d89b',
-    rimLight: '#8a6234',
-    ambient: '#120f0c',
-    sculpture: '#dcb878',
-    roughness: 0.22,
-    metalness: 0.85,
+    keyLight: '#ffdfa8',
+    rimLight: '#cdaa6e',
+    fillLight: '#3a2a18',
+    coreColor: '#f7d8a5',
+    glassColor: '#ffffff',
+    glassAttenuation: '#fdf6ea',
+    dispersion: 0.08,
+    roughness: 0.06,
+    ior: 1.54,
   },
   hair: {
-    keyLight: '#e49b55',
-    rimLight: '#783818',
-    ambient: '#1a1008',
-    sculpture: '#c97a38',
-    roughness: 0.35,
-    metalness: 0.65,
+    keyLight: '#f5b072',
+    rimLight: '#d97736',
+    fillLight: '#4a250e',
+    coreColor: '#f79a4d',
+    glassColor: '#fff5ec',
+    glassAttenuation: '#fde8d4',
+    dispersion: 0.1,
+    roughness: 0.1,
+    ior: 1.52,
   },
   color: {
-    keyLight: '#f36892',
-    rimLight: '#6e2b9c',
-    ambient: '#1a0c18',
-    sculpture: '#e69078',
-    roughness: 0.15,
-    metalness: 0.9,
+    keyLight: '#f472b6',
+    rimLight: '#a855f7',
+    fillLight: '#3b0764',
+    coreColor: '#e879f9',
+    glassColor: '#faf5ff',
+    glassAttenuation: '#f3e8ff',
+    dispersion: 0.18,
+    roughness: 0.04,
+    ior: 1.62,
   },
   skin: {
-    keyLight: '#fed7c3',
-    rimLight: '#c28b74',
-    ambient: '#16100d',
-    sculpture: '#f2c9b4',
-    roughness: 0.42,
-    metalness: 0.3,
+    keyLight: '#fed7aa',
+    rimLight: '#f43f5e',
+    fillLight: '#4c0519',
+    coreColor: '#fecdd3',
+    glassColor: '#fff1f2',
+    glassAttenuation: '#ffe4e6',
+    dispersion: 0.06,
+    roughness: 0.12,
+    ior: 1.48,
   },
   makeup: {
-    keyLight: '#ff4d6d',
-    rimLight: '#a01a38',
-    ambient: '#18080c',
-    sculpture: '#d96275',
-    roughness: 0.2,
-    metalness: 0.8,
+    keyLight: '#fb7185',
+    rimLight: '#e11d48',
+    fillLight: '#4c0519',
+    coreColor: '#fda4af',
+    glassColor: '#fff1f2',
+    glassAttenuation: '#fecdd3',
+    dispersion: 0.14,
+    roughness: 0.05,
+    ior: 1.58,
   },
   bridal: {
-    keyLight: '#fff5e4',
-    rimLight: '#d4af37',
-    ambient: '#151410',
-    sculpture: '#fbf0dc',
-    roughness: 0.18,
-    metalness: 0.75,
+    keyLight: '#fef08a',
+    rimLight: '#eab308',
+    fillLight: '#422006',
+    coreColor: '#fef9c3',
+    glassColor: '#ffffff',
+    glassAttenuation: '#fefce8',
+    dispersion: 0.12,
+    roughness: 0.04,
+    ior: 1.56,
   },
   gold: {
-    keyLight: '#ffe8a3',
-    rimLight: '#9e7328',
-    ambient: '#141006',
-    sculpture: '#d4af37',
-    roughness: 0.24,
-    metalness: 0.88,
+    keyLight: '#fde047',
+    rimLight: '#ca8a04',
+    fillLight: '#451a03',
+    coreColor: '#facc15',
+    glassColor: '#fffbeb',
+    glassAttenuation: '#fef3c7',
+    dispersion: 0.12,
+    roughness: 0.08,
+    ior: 1.55,
   },
   calm: {
-    keyLight: '#e8c992',
-    rimLight: '#624921',
-    ambient: '#0d0b08',
-    sculpture: '#c59d5f',
-    roughness: 0.3,
-    metalness: 0.7,
+    keyLight: '#e2e8f0',
+    rimLight: '#cbd5e1',
+    fillLight: '#0f172a',
+    coreColor: '#f8fafc',
+    glassColor: '#ffffff',
+    glassAttenuation: '#f1f5f9',
+    dispersion: 0.05,
+    roughness: 0.05,
+    ior: 1.5,
   },
 }
 
 /**
- * Procedural Organic Sculpture: "The Form of Transformation"
- * Represents hair, liquid grace, human silhouette and architectural light.
+ * Procedural Liquid Chromatic Prism:
+ * A morphing crystal glass sphere that breathes with multi-octave harmonic waves,
+ * capturing and refracting light like high-fashion digital art.
  */
-function TransformationSculpture() {
+function LiquidGlassSculpture() {
   const meshRef = useRef<THREE.Mesh>(null)
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null)
-  const currentMood = useStory((s) => s.activeMood)
+  const innerCoreRef = useRef<THREE.Mesh>(null)
+  const ringRef = useRef<THREE.Mesh>(null)
+  const glassMatRef = useRef<THREE.MeshPhysicalMaterial>(null)
+  const coreMatRef = useRef<THREE.MeshStandardMaterial>(null)
+
+  const activeMood = useStory((s) => s.activeMood)
   const scrollProgress = useStory((s) => s.scrollProgress)
   const scrollVelocity = useStory((s) => s.scrollVelocity)
 
-  // Algorithmic organic geometry combining flowing hair torus knot with wave displacements
-  const geometry = useMemo(() => {
-    // Torus knot with subtle organic proportions
-    const geom = new THREE.TorusKnotGeometry(1.6, 0.46, 160, 28, 2, 3)
-    return geom
+  // Subdivided icosahedron for fluid ripple deformation
+  const { geometry, originalPositions } = useMemo(() => {
+    const geom = new THREE.IcosahedronGeometry(1.5, 48)
+    const pos = geom.attributes.position
+    const orig = new Float32Array(pos.count * 3)
+    orig.set(pos.array)
+    return { geometry: geom, originalPositions: orig }
   }, [])
 
-  // Target values for smooth lerp
-  const targetScale = useRef(1)
-  const targetZ = useRef(0)
-  const targetRotation = useRef({ x: 0, y: 0 })
+  // Orbital halo ring geometry
+  const haloGeometry = useMemo(() => new THREE.TorusGeometry(2.35, 0.024, 32, 128), [])
+
+  // Target positions & scales for cinematic choreography
+  const targetScale = useRef(1.0)
+  const targetPos = useRef(new THREE.Vector3(0, 0, 0))
 
   useFrame((state, delta) => {
-    if (!meshRef.current || !materialRef.current) return
-    smoothPointer(delta, 3.2)
+    if (!meshRef.current || !glassMatRef.current || !coreMatRef.current) return
+    smoothPointer(delta, 3.5)
 
     const time = state.clock.getElapsedTime()
     const pX = pointer.sx
     const pY = pointer.sy
 
-    // Camera / scroll choreography:
-    // ARRIVE (0 - 0.12): majestic center stage
-    // DISCOVER (0.12 - 0.28): plunges forward into the camera, scale expands
-    // EXPLORE (0.28 - 0.45): shifts slightly to the right, morphs with services
-    // TRANSFORM (0.45 - 0.62): central fluid ripple
-    // ARCHIVE (0.62 - 0.78): recedes in depth as a background portal
-    // ARTISANS (0.78 - 0.90): gentle orbital drift
-    // BOOK (0.90 - 1.0): settles to calm small scale
+    // Dynamic wave deformation on the liquid glass mesh
+    const pos = geometry.attributes.position
+    const count = pos.count
+    const speed = 1.2 + Math.abs(scrollVelocity) * 2.0
+    const amplitude = 0.16 + Math.abs(scrollVelocity) * 0.25
 
-    let s = 1.0
-    let z = 0
-    let xOffset = 0
-    let yOffset = 0
+    for (let i = 0; i < count; i++) {
+      const idx = i * 3
+      const ox = originalPositions[idx]
+      const oy = originalPositions[idx + 1]
+      const oz = originalPositions[idx + 2]
 
-    if (scrollProgress < 0.12) {
-      s = 1.0 - scrollProgress * 1.5
-      z = scrollProgress * 2.0
-      xOffset = pX * 0.4
-      yOffset = pY * 0.4
-    } else if (scrollProgress < 0.3) {
-      const t = (scrollProgress - 0.12) / 0.18
-      s = 0.8 + t * 0.6
-      z = 2.0 + t * 3.5
-      xOffset = pX * 0.6 - t * 0.8
-    } else if (scrollProgress < 0.5) {
-      const t = (scrollProgress - 0.3) / 0.2
-      s = 1.1 - t * 0.3
-      z = 1.5 - t * 1.0
-      xOffset = 1.2 - t * 0.4 + pX * 0.5
-    } else if (scrollProgress < 0.7) {
-      const t = (scrollProgress - 0.5) / 0.2
-      s = 0.9 + Math.sin(t * Math.PI) * 0.3
-      z = 0.5 + t * 0.5
-      xOffset = pX * 0.3
-    } else if (scrollProgress < 0.88) {
-      const t = (scrollProgress - 0.7) / 0.18
-      s = 0.75 - t * 0.2
-      z = -1.2 - t * 1.5
-      xOffset = -1.4 + t * 0.6 + pX * 0.3
+      // Spherical harmonic waves
+      const u = Math.sin(ox * 2.5 + time * speed)
+      const v = Math.cos(oy * 3.0 + time * (speed * 0.8))
+      const w = Math.sin(oz * 2.2 + time * (speed * 1.1))
+      const wave = (u + v + w) / 3.0
+
+      const factor = 1.0 + wave * amplitude
+      pos.setXYZ(i, ox * factor, oy * factor, oz * factor)
+    }
+    pos.needsUpdate = true
+    geometry.computeVertexNormals()
+
+    // Choreographed narrative camera track:
+    // 01 ARRIVE (0 - 0.12): Centered, glowing majestic presence
+    // 02 DISCOVER (0.12 - 0.28): Floats forward towards viewer, expands
+    // 03 EXPLORE / SERVICES (0.28 - 0.46): Glides rightward to frame interactive type
+    // 04 TRANSFORM (0.46 - 0.62): Fluid morphing central state
+    // 05 ARCHIVE (0.62 - 0.78): Glides into deep background as floating celestial orb
+    // 06 ARTISANS (0.78 - 0.88): Gentle leftward offset
+    // 07 SANCTUARY (0.88 - 0.94): Central meditative scale
+    // 08 BOOK (0.94 - 1.0): Settles as a serene halo at the bottom
+
+    const p = scrollProgress
+    if (p < 0.14) {
+      targetScale.current = 1.0 + Math.sin(time * 0.8) * 0.04
+      targetPos.current.set(pX * 0.3, pY * 0.2, 0)
+    } else if (p < 0.3) {
+      const t = (p - 0.14) / 0.16
+      targetScale.current = THREE.MathUtils.lerp(1.0, 1.45, t)
+      targetPos.current.set(pX * 0.4, pY * 0.3, THREE.MathUtils.lerp(0, 1.2, t))
+    } else if (p < 0.48) {
+      const t = (p - 0.3) / 0.18
+      targetScale.current = THREE.MathUtils.lerp(1.45, 1.1, t)
+      targetPos.current.set(THREE.MathUtils.lerp(0, 1.35, t) + pX * 0.2, pY * 0.2, 0.4)
+    } else if (p < 0.64) {
+      const t = (p - 0.48) / 0.16
+      targetScale.current = 1.25 + Math.sin(time * 2.0) * 0.08
+      targetPos.current.set(THREE.MathUtils.lerp(1.35, 0, t) + pX * 0.2, pY * 0.2, 0.2)
+    } else if (p < 0.8) {
+      const t = (p - 0.64) / 0.16
+      targetScale.current = THREE.MathUtils.lerp(1.25, 0.75, t)
+      targetPos.current.set(0, -0.3, THREE.MathUtils.lerp(0.2, -2.0, t))
+    } else if (p < 0.92) {
+      targetScale.current = 0.9
+      targetPos.current.set(-1.2 + pX * 0.2, pY * 0.2, -0.5)
     } else {
-      const t = (scrollProgress - 0.88) / 0.12
-      s = 0.55 - t * 0.2
-      z = -2.5
-      xOffset = pX * 0.2
-      yOffset = -0.5
+      const t = (p - 0.92) / 0.08
+      targetScale.current = THREE.MathUtils.lerp(0.9, 0.55, t)
+      targetPos.current.set(0, THREE.MathUtils.lerp(-0.2, -1.6, t), -1.0)
     }
 
-    // Add responsiveness to scroll velocity
-    const velocityKick = Math.min(2.5, Math.abs(scrollVelocity) * 3.0)
-    s += velocityKick * 0.08
+    // Smooth lerp scale & position
+    meshRef.current.position.lerp(targetPos.current, 0.06)
+    const currentS = meshRef.current.scale.x
+    const nextS = THREE.MathUtils.lerp(currentS, targetScale.current, 0.06)
+    meshRef.current.scale.set(nextS, nextS, nextS)
 
-    targetScale.current = s
-    targetZ.current = z
+    // Fluid rotation reacting to time and pointer
+    meshRef.current.rotation.x = time * 0.18 + pY * 0.45
+    meshRef.current.rotation.y = time * 0.24 + pX * 0.55
 
-    // Lerp transform
-    meshRef.current.scale.lerp(new THREE.Vector3(s, s, s), 0.08)
-    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, xOffset, 0.06)
-    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, yOffset, 0.06)
-    meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, targetZ.current, 0.06)
+    // Halo ring follows and orbits with tilt
+    if (ringRef.current) {
+      ringRef.current.position.copy(meshRef.current.position)
+      ringRef.current.rotation.x = time * -0.15 + 0.6 + pY * 0.2
+      ringRef.current.rotation.y = time * 0.3 + pX * 0.3
+      const ringScale = nextS * (1.1 + Math.sin(time * 0.5) * 0.05)
+      ringRef.current.scale.set(ringScale, ringScale, ringScale)
+    }
 
-    // Gentle rotation influenced by time + cursor chase
-    targetRotation.current.x = time * 0.15 + pY * 0.6
-    targetRotation.current.y = time * 0.22 + pX * 0.8 + scrollProgress * Math.PI * 2
+    // Inner glowing core follows inside
+    if (innerCoreRef.current) {
+      innerCoreRef.current.position.copy(meshRef.current.position)
+      const coreScale = nextS * (0.42 + Math.sin(time * 1.5) * 0.04)
+      innerCoreRef.current.scale.set(coreScale, coreScale, coreScale)
+    }
 
-    meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, targetRotation.current.x, 0.05)
-    meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, targetRotation.current.y, 0.05)
-    meshRef.current.rotation.z = Math.sin(time * 0.12) * 0.2
+    // Smooth material mood transition
+    const palette = MOOD_PALETTES[activeMood] || MOOD_PALETTES.noir
+    const lerpSpeed = 0.06
 
-    // Material color interpolation according to mood
-    const palette = MOOD_PALETTES[currentMood] || MOOD_PALETTES.noir
-    const targetColor = new THREE.Color(palette.sculpture)
-    materialRef.current.color.lerp(targetColor, 0.05)
-    materialRef.current.roughness = THREE.MathUtils.lerp(materialRef.current.roughness, palette.roughness, 0.05)
-    materialRef.current.metalness = THREE.MathUtils.lerp(materialRef.current.metalness, palette.metalness, 0.05)
+    glassMatRef.current.roughness = THREE.MathUtils.lerp(
+      glassMatRef.current.roughness,
+      palette.roughness,
+      lerpSpeed
+    )
+    glassMatRef.current.ior = THREE.MathUtils.lerp(glassMatRef.current.ior, palette.ior, lerpSpeed)
+
+    if (glassMatRef.current.attenuationColor) {
+      glassMatRef.current.attenuationColor.lerp(new THREE.Color(palette.glassAttenuation), lerpSpeed)
+    }
+
+    coreMatRef.current.color.lerp(new THREE.Color(palette.coreColor), lerpSpeed)
+    coreMatRef.current.emissive.lerp(new THREE.Color(palette.coreColor), lerpSpeed)
+    coreMatRef.current.emissiveIntensity = 2.2 + Math.sin(time * 2.0) * 0.6
   })
 
   return (
-    <mesh ref={meshRef} geometry={geometry}>
-      <meshStandardMaterial
-        ref={materialRef}
-        color="#dcb878"
-        roughness={0.22}
-        metalness={0.85}
-        wireframe={false}
-      />
-    </mesh>
+    <group>
+      {/* Outer Liquid Glass Sculpture */}
+      <mesh ref={meshRef} geometry={geometry}>
+        <meshPhysicalMaterial
+          ref={glassMatRef}
+          transmission={0.96}
+          thickness={1.8}
+          roughness={0.06}
+          ior={1.54}
+          clearcoat={1.0}
+          clearcoatRoughness={0.06}
+          reflectivity={0.92}
+          attenuationDistance={1.2}
+          attenuationColor="#fdf6ea"
+          color="#ffffff"
+          envMapIntensity={1.5}
+        />
+      </mesh>
+
+      {/* Luminous Pulsing Inner Core */}
+      <mesh ref={innerCoreRef}>
+        <sphereGeometry args={[0.65, 32, 32]} />
+        <meshStandardMaterial
+          ref={coreMatRef}
+          color="#f7d8a5"
+          emissive="#f7d8a5"
+          emissiveIntensity={2.5}
+          roughness={0.3}
+        />
+      </mesh>
+
+      {/* Orbital Refracting Halo Ring */}
+      <mesh ref={ringRef} geometry={haloGeometry}>
+        <meshPhysicalMaterial
+          transmission={0.88}
+          thickness={0.5}
+          roughness={0.12}
+          ior={1.6}
+          clearcoat={0.9}
+          color="#fef3c7"
+          emissive="#cdaa6e"
+          emissiveIntensity={0.35}
+        />
+      </mesh>
+    </group>
   )
 }
 
 /**
- * Beauty Particles Cloud:
- * 750 floating reflective cosmetic motes & studio lighting dust that respond to cursor and velocity.
+ * Celestial Stardust Particles:
+ * 700 organic, soft shimmering particles that drift in zero-gravity,
+ * swirl with scroll velocity, and gently scatter around the user's cursor.
  */
-function BeautyDustCloud({ count = 650 }: { count?: number }) {
+function CosmicStardustCloud({ count = 750 }: { count?: number }) {
   const pointsRef = useRef<THREE.Points>(null)
   const scrollVelocity = useStory((s) => s.scrollVelocity)
 
-  const { positions, originalPositions, randomFactors } = useMemo(() => {
+  const { positions, originalPositions, randomFactors, colors } = useMemo(() => {
     const pos = new Float32Array(count * 3)
     const orig = new Float32Array(count * 3)
-    const rand = new Float32Array(count * 3)
+    const rnd = new Float32Array(count * 3)
+    const cols = new Float32Array(count * 3)
+
+    const palette = ['#ffecc7', '#f6d89b', '#cdaa6e', '#fef9c3', '#fed7aa']
 
     for (let i = 0; i < count; i++) {
       const idx = i * 3
-      // Distribute in a spherical cylinder around the camera
-      const radius = 2.5 + Math.random() * 6.5
+
+      // Toroidal orbital cloud distribution
+      const radius = 1.4 + Math.pow(Math.random(), 0.75) * 6.5
       const theta = Math.random() * Math.PI * 2
-      const y = (Math.random() - 0.5) * 10
+      const phi = (Math.random() - 0.5) * Math.PI * 0.9
 
-      const x = Math.cos(theta) * radius
-      const z = (Math.random() - 0.5) * 8
+      const x = radius * Math.cos(theta) * Math.cos(phi)
+      const y = radius * Math.sin(phi) * 1.1
+      const z = radius * Math.sin(theta) * Math.cos(phi) * 0.85
 
-      pos[idx] = orig[idx] = x
-      pos[idx + 1] = orig[idx + 1] = y
-      pos[idx + 2] = orig[idx + 2] = z
+      pos[idx] = x
+      pos[idx + 1] = y
+      pos[idx + 2] = z
 
-      rand[idx] = 0.5 + Math.random() * 0.8 // speed factor
-      rand[idx + 1] = Math.random() * Math.PI * 2 // phase
-      rand[idx + 2] = 0.4 + Math.random() * 0.8 // size
+      orig[idx] = x
+      orig[idx + 1] = y
+      orig[idx + 2] = z
+
+      rnd[idx] = Math.random() * 2 - 1
+      rnd[idx + 1] = Math.random() * 2 - 1
+      rnd[idx + 2] = 0.5 + Math.random() * 1.5
+
+      const c = new THREE.Color(palette[Math.floor(Math.random() * palette.length)])
+      cols[idx] = c.r
+      cols[idx + 1] = c.g
+      cols[idx + 2] = c.b
     }
-    return { positions: pos, originalPositions: orig, randomFactors: rand }
+
+    return { positions: pos, originalPositions: orig, randomFactors: rnd, colors: cols }
   }, [count])
 
-  // Custom particle texture
+  // Soft circular glow sprite for particles
   const particleTexture = useMemo(() => {
-    if (typeof document === 'undefined') return null
     const canvas = document.createElement('canvas')
     canvas.width = 64
     canvas.height = 64
     const ctx = canvas.getContext('2d')!
     const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32)
-    grad.addColorStop(0, 'rgba(255, 245, 220, 1.0)')
-    grad.addColorStop(0.2, 'rgba(235, 195, 125, 0.75)')
-    grad.addColorStop(0.6, 'rgba(180, 130, 60, 0.2)')
-    grad.addColorStop(1, 'rgba(0, 0, 0, 0)')
+    grad.addColorStop(0, 'rgba(255, 255, 255, 1)')
+    grad.addColorStop(0.2, 'rgba(254, 240, 199, 0.9)')
+    grad.addColorStop(0.55, 'rgba(205, 170, 110, 0.35)')
+    grad.addColorStop(1, 'rgba(205, 170, 110, 0)')
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, 64, 64)
     return new THREE.CanvasTexture(canvas)
   }, [])
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!pointsRef.current) return
     const time = state.clock.getElapsedTime()
-    const posAttr = pointsRef.current.geometry.attributes.position as THREE.BufferAttribute
-    const pos = posAttr.array as Float32Array
+    const pX = pointer.sx
+    const pY = pointer.sy
 
-    const pX = pointer.sx * 3.5
-    const pY = pointer.sy * 3.5
-    const vel = Math.abs(scrollVelocity) * 6.0
+    const pos = pointsRef.current.geometry.attributes.position
+    const velInfluence = Math.min(2.5, Math.abs(scrollVelocity) * 3.5)
 
     for (let i = 0; i < count; i++) {
       const idx = i * 3
-      const speed = randomFactors[idx]
-      const phase = randomFactors[idx + 1]
+      const ox = originalPositions[idx]
+      const oy = originalPositions[idx + 1]
+      const oz = originalPositions[idx + 2]
+      const factor = randomFactors[idx + 2]
 
-      // Natural gentle upward drift
-      let y = pos[idx + 1] + (0.35 * speed + vel * 0.6) * delta
-      if (y > 5.5) y = -5.5
+      // Gentle orbital harmonic drift
+      const angle = time * 0.12 * factor
+      const cosA = Math.cos(angle)
+      const sinA = Math.sin(angle)
 
-      // Floating wave motion
-      const xOrig = originalPositions[idx]
-      const zOrig = originalPositions[idx + 2]
-      let x = xOrig + Math.sin(time * 0.4 * speed + phase) * 0.4
-      let z = zOrig + Math.cos(time * 0.3 * speed + phase) * 0.4
+      let x = ox * cosA - oz * sinA
+      let z = ox * sinA + oz * cosA
+      let y = oy + Math.sin(time * 0.8 + ox) * 0.15
 
-      // Cursor magnetic push
-      const dx = x - pX
-      const dy = y - pY
-      const dist = Math.hypot(dx, dy)
-      if (dist < 1.8 && dist > 0.01) {
-        const force = (1.8 - dist) * 0.8
+      // Cursor dispersion push
+      const dx = x - pX * 3.0
+      const dy = y - pY * 3.0
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist < 1.8 && dist > 0.05) {
+        const force = (1.8 - dist) * 0.3
         x += (dx / dist) * force
         y += (dy / dist) * force
       }
 
-      pos[idx] = x
-      pos[idx + 1] = y
-      pos[idx + 2] = z
+      // Scroll turbulence
+      if (velInfluence > 0.01) {
+        x += Math.sin(time * 8.0 + idx) * velInfluence * 0.08
+        y += Math.cos(time * 8.0 + idx) * velInfluence * 0.08
+      }
+
+      pos.setXYZ(i, x, y, z)
     }
-    posAttr.needsUpdate = true
+    pos.needsUpdate = true
+
+    pointsRef.current.rotation.y = time * 0.02 + pX * 0.05
+    pointsRef.current.rotation.x = pY * 0.04
   })
 
   return (
     <points ref={pointsRef}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
+        <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-color" count={count} array={colors} itemSize={3} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.14}
-        map={particleTexture || undefined}
+        size={0.13}
+        vertexColors
+        map={particleTexture}
         transparent
         depthWrite={false}
         blending={THREE.AdditiveBlending}
-        color="#f2dba6"
-        opacity={0.8}
+        opacity={0.85}
       />
     </points>
   )
 }
 
-/** Mood responsive lights inside the 3D world */
+/** Dynamic three-point atmospheric lighting that morphs with the narrative moods */
 function WorldLights() {
-  const mood = useStory((s) => s.activeMood)
-  const palette = MOOD_PALETTES[mood] || MOOD_PALETTES.noir
-
-  const keyLightRef = useRef<THREE.DirectionalLight>(null)
+  const activeMood = useStory((s) => s.activeMood)
+  const keyLightRef = useRef<THREE.PointLight>(null)
   const rimLightRef = useRef<THREE.PointLight>(null)
   const ambientRef = useRef<THREE.AmbientLight>(null)
 
   useFrame(() => {
-    if (!keyLightRef.current || !rimLightRef.current || !ambientRef.current) return
-    keyLightRef.current.color.lerp(new THREE.Color(palette.keyLight), 0.06)
-    rimLightRef.current.color.lerp(new THREE.Color(palette.rimLight), 0.06)
-    ambientRef.current.color.lerp(new THREE.Color(palette.ambient), 0.06)
+    const palette = MOOD_PALETTES[activeMood] || MOOD_PALETTES.noir
+    const pX = pointer.sx
+    const pY = pointer.sy
 
-    // Cursor shifts light direction slightly
-    keyLightRef.current.position.x = 4 + pointer.sx * 3.0
-    keyLightRef.current.position.y = 5 + pointer.sy * 2.0
+    if (keyLightRef.current) {
+      keyLightRef.current.color.lerp(new THREE.Color(palette.keyLight), 0.06)
+      keyLightRef.current.position.set(4 + pX * 2.5, 3 + pY * 2.5, 4)
+    }
+    if (rimLightRef.current) {
+      rimLightRef.current.color.lerp(new THREE.Color(palette.rimLight), 0.06)
+      rimLightRef.current.position.set(-4 - pX * 2, -3 - pY * 2, -3)
+    }
+    if (ambientRef.current) {
+      ambientRef.current.color.lerp(new THREE.Color(palette.fillLight), 0.06)
+    }
   })
 
   return (
     <>
-      <ambientLight ref={ambientRef} intensity={1.2} />
-      <directionalLight ref={keyLightRef} position={[4, 5, 4]} intensity={2.8} />
-      <pointLight ref={rimLightRef} position={[-4, -3, -2]} intensity={3.5} />
-      <pointLight position={[0, 4, -4]} color="#ffffff" intensity={0.9} />
+      <ambientLight ref={ambientRef} intensity={0.7} />
+      <pointLight ref={keyLightRef} intensity={3.5} distance={16} decay={2} />
+      <pointLight ref={rimLightRef} intensity={2.8} distance={14} decay={2} />
+      <directionalLight position={[0, 6, 2]} intensity={1.2} color="#ffffff" />
     </>
   )
 }
 
-/** Camera Controller that responds to pointer tilt */
+/** Camera gentle responsive parallax rig */
 function CameraRig() {
-  const { camera } = useThree()
-
-  useFrame(() => {
-    // Elegant subtle camera tilt chasing mouse
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.sx * 0.45, 0.05)
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, pointer.sy * 0.35, 0.05)
+  useFrame(({ camera }) => {
+    const targetX = pointer.sx * 0.4
+    const targetY = pointer.sy * 0.3
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 0.05)
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05)
     camera.lookAt(0, 0, 0)
   })
-
   return null
 }
 
@@ -357,20 +492,19 @@ export function WorldCanvas() {
   return (
     <div className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden">
       <Canvas
+        camera={{ position: [0, 0, 5.2], fov: 45 }}
         gl={{
           antialias: true,
           alpha: true,
           powerPreference: 'high-performance',
-          toneMapping: THREE.ACESFilmicToneMapping,
         }}
-        camera={{ position: [0, 0, 5.5], fov: 45 }}
-        dpr={[1, 1.5]}
+        dpr={[1, 1.75]}
       >
         <Suspense fallback={null}>
-          <WorldLights />
           <CameraRig />
-          <TransformationSculpture />
-          <BeautyDustCloud count={typeof window !== 'undefined' && window.innerWidth < 768 ? 280 : 650} />
+          <WorldLights />
+          <LiquidGlassSculpture />
+          <CosmicStardustCloud count={750} />
         </Suspense>
       </Canvas>
     </div>
