@@ -7,39 +7,60 @@ import { PALETTE as C, plasterTexture } from './textures'
    Materials — shared instances so we keep the draw-call / program count low.
    ──────────────────────────────────────────────────────────────────────────── */
 
-export function useSalonMaterials() {
-  return useMemo(() => {
-    const brass = new THREE.MeshStandardMaterial({
+export interface SalonMaterials {
+  brass: THREE.MeshStandardMaterial
+  darkBrass: THREE.MeshStandardMaterial
+  boucle: THREE.MeshStandardMaterial
+  ivoryStone: THREE.MeshStandardMaterial
+  charcoal: THREE.MeshStandardMaterial
+  plaster: THREE.MeshStandardMaterial
+  amber: THREE.MeshPhysicalMaterial
+}
+
+let shared: SalonMaterials | null = null
+
+/**
+ * One material set for the whole room.
+ *
+ * There are ~15 pieces of furniture in the set; creating a fresh palette for
+ * each of them would mean a hundred materials and a hundred uniform uploads per
+ * frame. Three.js materials are safe to share across meshes, so we build them
+ * once and hand out the same instances everywhere.
+ */
+export function salonMaterials(): SalonMaterials {
+  if (shared) return shared
+  shared = {
+    brass: new THREE.MeshStandardMaterial({
       color: C.brass,
       metalness: 1,
       roughness: 0.3,
       envMapIntensity: 1.15,
-    })
-    const darkBrass = new THREE.MeshStandardMaterial({
+    }),
+    darkBrass: new THREE.MeshStandardMaterial({
       color: C.deepBrass,
       metalness: 1,
       roughness: 0.45,
       envMapIntensity: 0.9,
-    })
-    const boucle = new THREE.MeshStandardMaterial({ color: '#EFE7DA', roughness: 0.92, metalness: 0 })
-    const ivoryStone = new THREE.MeshStandardMaterial({ color: '#F1EADF', roughness: 0.62, metalness: 0 })
-    const charcoal = new THREE.MeshStandardMaterial({ color: C.charcoal, roughness: 0.62, metalness: 0.05 })
-    const plaster = new THREE.MeshStandardMaterial({
+    }),
+    boucle: new THREE.MeshStandardMaterial({ color: '#EFE7DA', roughness: 0.92, metalness: 0 }),
+    ivoryStone: new THREE.MeshStandardMaterial({ color: '#F1EADF', roughness: 0.62, metalness: 0 }),
+    charcoal: new THREE.MeshStandardMaterial({ color: C.charcoal, roughness: 0.62, metalness: 0.05 }),
+    plaster: new THREE.MeshStandardMaterial({
       color: '#E9DFCF',
       roughness: 0.95,
       metalness: 0,
       map: plasterTexture(2),
-    })
-    const amber = new THREE.MeshPhysicalMaterial({
+    }),
+    amber: new THREE.MeshPhysicalMaterial({
       color: '#8A5A28',
       roughness: 0.22,
       metalness: 0,
       transmission: 0.65,
       thickness: 0.4,
       ior: 1.45,
-    })
-    return { brass, darkBrass, boucle, ivoryStone, charcoal, plaster, amber }
-  }, [])
+    }),
+  }
+  return shared
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -55,7 +76,7 @@ export function SalonChair({
   rotation?: [number, number, number]
   quality?: 'high' | 'medium' | 'low'
 }) {
-  const m = useSalonMaterials()
+  const m = salonMaterials()
   const smoothness = quality === 'high' ? 3 : 1
 
   return (
@@ -125,7 +146,7 @@ export function StylingStation({
   position?: [number, number, number]
   quality?: 'high' | 'medium' | 'low'
 }) {
-  const m = useSalonMaterials()
+  const m = salonMaterials()
   const smoothness = quality === 'high' ? 3 : 1
 
   return (
@@ -352,7 +373,7 @@ export function OliveTree({
     mesh.instanceMatrix.needsUpdate = true
   }, [seed])
 
-  const m = useSalonMaterials()
+  const m = salonMaterials()
 
   return (
     <group position={position} scale={scale}>
@@ -401,7 +422,7 @@ export function OliveTree({
    ──────────────────────────────────────────────────────────────────────────── */
 
 export function Pendant({ position = [0, 0, 0] }: { position?: [number, number, number] }) {
-  const m = useSalonMaterials()
+  const m = salonMaterials()
   return (
     <group position={position}>
       <mesh position={[0, 1.1, 0]} material={m.brass}>
@@ -424,7 +445,7 @@ export function Pendant({ position = [0, 0, 0] }: { position?: [number, number, 
    ──────────────────────────────────────────────────────────────────────────── */
 
 export function SideConsole({ position = [0, 0, 0] }: { position?: [number, number, number] }) {
-  const m = useSalonMaterials()
+  const m = salonMaterials()
   return (
     <group position={position}>
       <mesh castShadow receiveShadow position={[0, 0.8, 0]} material={m.ivoryStone}>
@@ -478,7 +499,7 @@ export function MirrorPanel({
   width?: number
   height?: number
 }) {
-  const m = useSalonMaterials()
+  const m = salonMaterials()
   return (
     <group position={position} rotation={rotation}>
       <mesh castShadow material={m.brass}>
