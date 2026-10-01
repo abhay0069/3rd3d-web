@@ -52,11 +52,11 @@ export function FloatingBook() {
                 type="button"
                 onClick={() => open()}
                 data-cursor="hover"
-                className="group relative flex items-center gap-3 rounded-full bg-charcoal py-3.5 pl-6 pr-5 text-ivory shadow-[0_18px_50px_-18px_rgba(13,12,10,0.7)] transition-all duration-500 ease-silk hover:gap-4 hover:pr-7"
+                className="btn-gold group relative flex items-center gap-3 overflow-hidden rounded-full py-3.5 pl-6 pr-5 shadow-[0_18px_50px_-14px_rgba(205,170,110,0.45)] transition-all duration-500 ease-silk hover:gap-4 hover:pr-7"
               >
                 <span className="relative flex h-1.5 w-1.5 shrink-0">
-                  <span className="absolute inset-0 rounded-full bg-champagne" />
-                  <span className="absolute inset-0 animate-ping rounded-full bg-champagne/60" />
+                  <span className="absolute inset-0 rounded-full bg-ink" />
+                  <span className="absolute inset-0 animate-ping rounded-full bg-ink/50" />
                 </span>
                 <span className="font-sans text-[11px] uppercase tracking-wide2">
                   Book appointment
@@ -83,20 +83,20 @@ export function FloatingBook() {
             exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.6, ease: EASE_SILK }}
           >
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ivory/95 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink/95 to-transparent" />
             <div className="relative mx-3 flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => open()}
-                className="flex h-14 flex-1 items-center justify-center gap-3 rounded-full bg-charcoal font-sans text-[11px] uppercase tracking-wide2 text-ivory"
+                className="btn-gold flex h-14 flex-1 items-center justify-center gap-3 rounded-full font-sans text-[11px] uppercase tracking-wide2"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-champagne" />
+                <span className="h-1.5 w-1.5 rounded-full bg-ink" />
                 Book appointment
               </button>
               <a
                 href={SITE.phoneHref}
                 aria-label={`Call the studio on ${SITE.phone}`}
-                className="glass flex h-14 w-14 items-center justify-center rounded-full text-charcoal"
+                className="glass-dark flex h-14 w-14 items-center justify-center rounded-full text-gold-hi"
               >
                 <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
                   <path

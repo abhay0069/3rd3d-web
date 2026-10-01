@@ -5,7 +5,7 @@ import { Reveal } from '../ui/Reveal'
 
 export function BookingSection() {
   return (
-    <section id="book" className="relative bg-ivory pb-24 pt-24 sm:pb-28 sm:pt-28 lg:pb-36 lg:pt-36">
+    <section id="book" className="relative bg-ivory pb-28 pt-28 text-charcoal sm:pb-32 sm:pt-32 lg:pb-40 lg:pt-40">
       <div className="container-editorial">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading

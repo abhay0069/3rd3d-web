@@ -42,7 +42,7 @@ export function Experience() {
   })
 
   return (
-    <section id="experience" className="relative bg-ink py-24 text-ivory sm:py-28 lg:py-36">
+    <section id="experience" className="relative bg-noir py-28 text-ivory sm:py-32 lg:py-40">
       <div className="container-editorial">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
@@ -87,7 +87,7 @@ export function Experience() {
                 <ParallaxMedia
                   src={active.src}
                   alt={`${active.alt} at the LUMIÈRE studio`}
-                  className="aspect-[4/5] w-full sm:aspect-[16/10] lg:aspect-[16/9]"
+                  className="aspect-[4/5] w-full !bg-umber sm:aspect-[16/10] lg:aspect-[16/9]"
                   distance={50}
                   zoom={1.08}
                 >

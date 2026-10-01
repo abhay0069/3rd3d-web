@@ -87,17 +87,18 @@ export function Transformation() {
   }
 
   return (
-    <section id="gallery" className="relative bg-porcelain py-24 sm:py-28 lg:py-36">
+    <section id="gallery" className="relative bg-ink py-28 sm:py-32 lg:py-40">
       <div className="container-editorial">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             index="03"
             eyebrow="Gallery — The Transformation"
-            lines={['Drag to see', <em key="b" className="italic text-brass">the difference.</em>]}
+            tone="light"
+            lines={['Drag to see', <em key="b">the difference.</em>]}
           />
           <Reveal delay={0.2} className="max-w-xs lg:pb-2">
-            <p className="text-[13px] leading-relaxed text-smoke">
-              {TRANSFORMATION.caption}. <span className="text-taupe">{TRANSFORMATION.stylist}.</span>{' '}
+            <p className="text-[13px] leading-relaxed text-ivory/60">
+              {TRANSFORMATION.caption}. <span className="text-ivory/40">{TRANSFORMATION.stylist}.</span>{' '}
               Unretouched, shot in the same light, ten minutes apart.
             </p>
           </Reveal>
@@ -128,7 +129,7 @@ export function Transformation() {
               ;(event.target as HTMLElement).setPointerCapture?.(event.pointerId)
               update(event.clientX)
             }}
-            className="relative aspect-[4/3] w-full cursor-ew-resize select-none overflow-hidden bg-sand sm:aspect-[16/10]"
+            className="relative aspect-[4/3] w-full cursor-ew-resize select-none overflow-hidden bg-umber ring-1 ring-gold/25 sm:aspect-[16/10]"
             style={{ touchAction: 'pan-y' }}
           >
             {/* BEFORE */}
@@ -193,9 +194,9 @@ export function Transformation() {
             </motion.div>
           </div>
 
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-4 font-sans text-[11px] uppercase tracking-wide2 text-taupe">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-4 font-sans text-[11px] uppercase tracking-wide2 text-ivory/40">
             <span>Slide, or use ← → keys</span>
-            <span className="text-charcoal">{Math.round(displayPos)}% revealed</span>
+            <span className="text-gold-hi">{Math.round(displayPos)}% revealed</span>
           </div>
         </div>
       </div>

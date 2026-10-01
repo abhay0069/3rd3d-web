@@ -74,7 +74,7 @@ export function BookingDialog() {
             aria-modal="true"
             aria-labelledby="booking-title"
             tabIndex={-1}
-            className="absolute inset-y-0 right-0 flex w-full max-w-[1060px] flex-col bg-ivory shadow-[0_0_120px_rgba(0,0,0,0.35)] outline-none sm:inset-y-3 sm:right-3 sm:rounded-sm"
+            className="absolute inset-y-0 right-0 flex w-full max-w-[1060px] flex-col bg-ivory text-charcoal shadow-[0_0_120px_rgba(0,0,0,0.35)] outline-none sm:inset-y-3 sm:right-3 sm:rounded-sm"
             initial={reduced ? { opacity: 0 } : { x: '4%', opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={reduced ? { opacity: 0 } : { x: '4%', opacity: 0 }}

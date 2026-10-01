@@ -26,7 +26,7 @@ export function Looks() {
   return (
     <section
       id="looks"
-      className="relative overflow-hidden py-24 transition-colors duration-1000 ease-silk sm:py-28 lg:py-36"
+      className="relative overflow-hidden py-28 transition-colors duration-1000 ease-silk sm:py-32 lg:py-40"
       style={{ backgroundColor: selected.palette.base, color: selected.palette.text }}
       aria-labelledby="looks-title"
     >
@@ -51,11 +51,7 @@ export function Looks() {
               </div>
             </Reveal>
 
-            <h2
-              id="looks-title"
-              className="display-lg mt-5"
-              style={{ letterSpacing: selected.typeStyle.tracking }}
-            >
+            <h2 id="looks-title" className="display-lg mt-5">
               <RevealLines lines={['Four ways', 'to wear it.']} />
             </h2>
 
@@ -84,7 +80,7 @@ export function Looks() {
                           }}
                         />
                         <span
-                          className={`font-display text-[8vw] leading-[1.06] transition-all duration-700 ease-silk sm:text-[2.6rem] ${
+                          className={`font-display text-[9vw] leading-[1.04] transition-all duration-700 ease-expo sm:text-[3.3rem] ${
                             isSelected ? 'opacity-100' : 'opacity-35 group-hover:opacity-70'
                           } ${look.typeStyle.italic && isSelected ? 'italic' : ''}`}
                           style={{
@@ -151,40 +147,42 @@ export function Looks() {
             </motion.div>
           </div>
 
-          {/* ── Right: the portrait ───────────────────────────────────── */}
-          <div className="relative">
-            <div className="relative aspect-[3/4] overflow-hidden bg-black/5 sm:aspect-[4/5]">
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.img
-                  key={preview.id}
-                  src={preview.image}
-                  alt={`${preview.name} — ${preview.subtitle}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
-                  initial={{ opacity: 0, scale: 1.07 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  transition={{ duration: 1, ease: EASE_SILK }}
-                />
-              </AnimatePresence>
+          {/* ── Right: the portrait, in an arch that borrows the look's accent ──── */}
+          <div className="relative mx-auto w-full max-w-[460px] lg:ml-auto lg:mr-0 lg:w-[86%] lg:max-w-none">
+            <div className="arch-ring" style={{ ['--ring' as string]: `${selected.palette.accent}99` }}>
+              <div className="arch relative aspect-[3/4.15] overflow-hidden bg-black/5">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.img
+                    key={preview.id}
+                    src={preview.image}
+                    alt={`${preview.name} — ${preview.subtitle}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover"
+                    initial={{ opacity: 0, scale: 1.09 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.02 }}
+                    transition={{ duration: 1.1, ease: EASE_SILK }}
+                  />
+                </AnimatePresence>
 
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background: `linear-gradient(to top, ${selected.palette.base} 0%, transparent 34%)`,
-                }}
-              />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background: `linear-gradient(to top, ${selected.palette.base} 0%, transparent 26%)`,
+                  }}
+                />
+              </div>
             </div>
 
-            <div className="absolute -left-2 bottom-6 hidden sm:block lg:-left-8">
+            <div className="absolute -left-2 bottom-8 hidden sm:block lg:-left-14">
               <motion.p
                 key={preview.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: EASE_SILK }}
-                className="font-display text-3xl italic sm:text-4xl"
+                className="font-display text-4xl italic sm:text-5xl"
                 style={{ color: selected.palette.text }}
               >
                 {preview.name}
