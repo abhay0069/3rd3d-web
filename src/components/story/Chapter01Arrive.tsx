@@ -13,9 +13,9 @@ export function Chapter01Arrive() {
   })
 
   // Text moves forward into depth & dissolves as the user scrolls into the realm
-  const textScale = useTransform(scrollYProgress, [0, 0.7], [1, 2.2])
-  const textOpacity = useTransform(scrollYProgress, [0, 0.4, 0.8], [1, 0.7, 0])
-  const textZ = useTransform(scrollYProgress, [0, 0.8], [0, 240])
+  const textScale = useTransform(scrollYProgress, [0, 0.7], [1, 2.0])
+  const textOpacity = useTransform(scrollYProgress, [0, 0.45, 0.8], [1, 0.6, 0])
+  const textZ = useTransform(scrollYProgress, [0, 0.8], [0, 200])
 
   const scrollToNext = () => {
     sound.playClick()
@@ -29,87 +29,80 @@ export function Chapter01Arrive() {
     <section
       id="arrive"
       ref={containerRef}
-      className="relative flex h-[150vh] w-full flex-col items-center justify-start overflow-hidden bg-transparent pt-[16vh] sm:pt-[20vh]"
+      className="relative flex h-[160vh] w-full flex-col items-center justify-start overflow-hidden bg-transparent pt-[14vh] sm:pt-[18vh]"
       onMouseEnter={() => setCursor('explore', 'ENTER')}
       onMouseLeave={() => setCursor('default')}
     >
-      <div className="sticky top-[14vh] sm:top-[16vh] flex w-full max-w-6xl flex-col items-center px-6 text-center">
-        {/* Noomo-Style Chic Badge */}
+      <div className="sticky top-[12vh] sm:top-[14vh] flex w-full max-w-6xl flex-col items-center px-6 text-center">
+        {/* Noomo Agency Exact Headline Style */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2.5 rounded-full border border-gold/30 bg-white/[0.04] px-4 py-1.5 backdrop-blur-md"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-3"
         >
-          <span className="text-[11px] text-gold animate-pulse">✦</span>
-          <span className="font-sans text-[9px] uppercase tracking-[0.34em] text-gold-hi sm:text-[10px]">
-            AN INTERACTIVE DIGITAL ART EXPERIENCE
-          </span>
-          <span className="text-[11px] text-gold animate-pulse">✦</span>
+          <p className="font-sans text-[11px] sm:text-[13px] tracking-[0.55em] uppercase text-ivory/70 font-light">
+            T H E &nbsp; P O W E R &nbsp; O F &nbsp; D I G I T A L
+          </p>
+          <h1 className="font-display text-[clamp(2.8rem,8.2vw,7.6rem)] font-light leading-[0.9] tracking-[0.06em] text-[#f7f3ec] uppercase">
+            S T O R Y T E L L I N G
+          </h1>
         </motion.div>
 
-        {/* Massive graphic typography occupying the environment */}
+        {/* Crystalline Subtitle */}
         <motion.div
           style={{
             scale: textScale,
             opacity: textOpacity,
             z: textZ,
           }}
-          className="mt-8 will-change-transform"
+          className="mt-6 will-change-transform max-w-2xl"
         >
-          <h1 className="font-display text-[clamp(2.7rem,8.6vw,7.8rem)] font-light leading-[0.92] tracking-[-0.035em] text-[#f7f3ec]">
-            <span className="block opacity-90">WHAT IF</span>
-            <span className="gold-foil block font-normal italic tracking-[-0.02em] py-1">
-              BEAUTY
-            </span>
-            <span className="block opacity-90">WAS SOMETHING</span>
-            <span className="block opacity-90">YOU COULD</span>
-            <span className="block text-gold-hi drop-shadow-[0_0_40px_rgba(205,170,110,0.35)]">
-              STEP INTO?
-            </span>
-          </h1>
+          <p className="font-serif italic text-[16px] sm:text-[21px] text-gold-hi leading-relaxed drop-shadow-[0_0_30px_rgba(205,170,110,0.3)]">
+            "What if beauty was something you could step into?"
+          </p>
         </motion.div>
 
-        {/* Noomo-Style Interactive "Tap to Explore" Action */}
+        {/* Noomo Signature "Tap to explore" button with pixel stars */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.0, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="mt-12 flex flex-col items-center gap-6"
         >
           <button
             type="button"
             onClick={scrollToNext}
-            className="group relative flex items-center gap-3.5 rounded-full border border-gold/40 bg-gradient-to-r from-gold/20 via-gold-hi/30 to-gold/20 px-8 py-3.5 text-ivory backdrop-blur-xl shadow-[0_0_35px_rgba(205,170,110,0.25)] transition-all duration-500 hover:scale-105 hover:border-gold hover:shadow-[0_0_55px_rgba(205,170,110,0.45)]"
+            className="group relative flex items-center gap-3.5 rounded-full border border-gold/40 bg-gradient-to-r from-gold/15 via-gold-hi/25 to-gold/15 px-8 py-3 text-ivory backdrop-blur-2xl shadow-[0_0_35px_rgba(205,170,110,0.25)] transition-all duration-500 hover:scale-105 hover:border-gold hover:shadow-[0_0_55px_rgba(205,170,110,0.45)]"
           >
             <span className="text-[13px] text-gold-hi group-hover:rotate-45 transition-transform duration-500">
               ✦
             </span>
-            <span className="font-sans text-[11px] uppercase tracking-[0.28em] text-[#f7f3ec] font-medium">
-              TAP TO ENTER THE REALM
+            <span className="font-sans text-[11px] uppercase tracking-[0.32em] text-[#f7f3ec] font-medium">
+              TAP TO EXPLORE
             </span>
             <span className="text-[13px] text-gold-hi group-hover:-rotate-45 transition-transform duration-500">
               ✦
             </span>
           </button>
 
-          {/* Floating Chic Studio Spec Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 text-ivory/50 font-sans text-[10px] tracking-widest uppercase">
-            <span className="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1">
-              BANDRA WEST · MUMBAI
+          {/* Floating Chic Specs */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5 text-ivory/50 font-sans text-[9.5px] tracking-[0.24em] uppercase">
+            <span className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1">
+              REIMAGINE PHOENIX
             </span>
-            <span className="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1">
-              5500K DAYLIGHT CALIBRATED
+            <span className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1">
+              ATELIER BANDRA WEST
             </span>
-            <span className="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1">
-              PRIVATE SANCTUARIES
+            <span className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1">
+              DAYLIGHT CALIBRATED
             </span>
           </div>
 
-          {/* Subtle Scroll Cue */}
-          <div className="flex flex-col items-center gap-2 pt-2 opacity-60">
-            <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-ivory/60">
-              OR SCROLL TO DIVE DEEP
+          {/* Minimalist Scroll Arrow Cue */}
+          <div className="flex flex-col items-center gap-2 pt-4 opacity-60">
+            <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-ivory/50">
+              SCROLL TO FLY
             </span>
             <div className="relative h-10 w-px overflow-hidden bg-ivory/20">
               <motion.div
