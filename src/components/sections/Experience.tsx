@@ -46,11 +46,11 @@ export function Experience() {
       <div className="container-editorial">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
-            index="04"
-            eyebrow="The Studio"
+            index="10"
+            eyebrow="The Salon, at last"
             tone="light"
-            lines={['Step inside.']}
-            intro="Six styling stations, one private beauty room, a dedicated colour studio and a bridal suite with its own door. Tap a marker to look around before you arrive."
+            lines={['And here,', <em key="b" className="italic text-champagne">the world becomes real.</em>]}
+            intro="After the portals, portraits and rituals, meet the place that has been waiting at the end of the golden thread: the LUMIÈRE salon in Bandra West. Explore each room before you arrive."
           />
           <Reveal delay={0.2}>
             <div className="flex flex-wrap gap-2" role="tablist" aria-label="Studio areas">

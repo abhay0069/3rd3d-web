@@ -95,15 +95,15 @@ export function FaceSection({ tier }: { tier: DeviceTier }) {
           className="container-editorial absolute inset-x-0 top-0 pt-28 text-center sm:pt-32"
           style={{ opacity: copyOpacity, y: copyY }}
         >
-          <p className="eyebrow !text-ivory/50">05 — The Artistry</p>
+          <p className="eyebrow !text-ivory/50">05 — The becoming</p>
           <h2 id="artistry-title" className="display-lg mx-auto mt-6 max-w-3xl text-ivory">
-            Precision you can
-            <em className="italic text-champagne"> see in the light.</em>
+            A new look,
+            <em className="italic text-champagne"> written in light.</em>
           </h2>
           <p className="mx-auto mt-6 max-w-lg text-[14px] leading-relaxed text-ivory/60">
             {reduced
-              ? 'Colour, cut and skin work held to daylight standard — checked twice before you leave the chair.'
-              : 'Scroll to watch a face assemble itself from light, then move your cursor. The particles respond the way our work does: quietly, and on your terms.'}
+              ? 'An artist’s eye, a considered transformation and a finish checked in daylight before you leave the chair.'
+              : 'Scroll to watch a portrait gather from thousands of warm points of light, then move your cursor. The image resolves into a real face: the artistry, and the person, together.'}
           </p>
         </motion.div>
 

@@ -46,8 +46,8 @@ export function Looks() {
           <div>
             <Reveal y={12}>
               <div className="flex items-center gap-4 opacity-70">
-                <span className="font-sans text-[10px] tracking-label">02</span>
-                <span className="eyebrow !text-current">Choose your look</span>
+                <span className="font-sans text-[10px] tracking-label">03</span>
+                <span className="eyebrow !text-current">The royal mirror · Choose your reflection</span>
               </div>
             </Reveal>
 
@@ -56,7 +56,7 @@ export function Looks() {
               className="display-lg mt-5"
               style={{ letterSpacing: selected.typeStyle.tracking }}
             >
-              <RevealLines lines={['Four ways', 'to wear it.']} />
+              <RevealLines lines={['Four reflections', 'of you.']} />
             </h2>
 
             <ul className="mt-10 space-y-1">
@@ -153,29 +153,37 @@ export function Looks() {
 
           {/* ── Right: the portrait ───────────────────────────────────── */}
           <div className="relative">
-            <div className="relative aspect-[3/4] overflow-hidden bg-black/5 sm:aspect-[4/5]">
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.img
-                  key={preview.id}
-                  src={preview.image}
-                  alt={`${preview.name} — ${preview.subtitle}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
-                  initial={{ opacity: 0, scale: 1.07 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  transition={{ duration: 1, ease: EASE_SILK }}
-                />
-              </AnimatePresence>
+            <div className="royal-mirror-frame relative">
+              <div className="relative aspect-[3/4] overflow-hidden bg-black/5 sm:aspect-[4/5]">
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.img
+                    key={preview.id}
+                    src={preview.image}
+                    alt={`${preview.name} — ${preview.subtitle}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover"
+                    initial={{ opacity: 0, scale: 1.07 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.02 }}
+                    transition={{ duration: 1, ease: EASE_SILK }}
+                  />
+                </AnimatePresence>
 
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background: `linear-gradient(to top, ${selected.palette.base} 0%, transparent 34%)`,
-                }}
-              />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background: `linear-gradient(to top, ${selected.palette.base} 0%, transparent 34%)`,
+                  }}
+                />
+                <span className="absolute left-5 top-5 font-sans text-[9px] uppercase tracking-[0.28em] text-ivory/80">
+                  The royal mirror
+                </span>
+                <span className="absolute bottom-5 right-5 font-sans text-[9px] uppercase tracking-[0.22em] text-ivory/65">
+                  Reflection 0{LOOKS.findIndex((look) => look.id === preview.id) + 1}
+                </span>
+              </div>
             </div>
 
             <div className="absolute -left-2 bottom-6 hidden sm:block lg:-left-8">

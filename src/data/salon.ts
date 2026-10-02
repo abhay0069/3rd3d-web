@@ -314,7 +314,7 @@ export const LOOKS: Look[] = [
     description:
       'A glossy blowout, a low chignon, skin that looks like skin. Elegant at forty as it was at twenty.',
     image: '/img/look-classic.jpg',
-    palette: { base: '#F7F3EC', surface: '#E9E1D4', text: '#1A1917', accent: '#A9884E' },
+    palette: { base: 'rgba(12, 9, 8, 0.9)', surface: 'rgba(166, 118, 67, 0.22)', text: '#F4EADD', accent: '#D5B273' },
     typeStyle: { tracking: '0.02em', italic: false },
     services: ['haircut', 'hair-styling', 'hair-colour', 'makeup'],
   },
@@ -325,7 +325,7 @@ export const LOOKS: Look[] = [
     description:
       'A blunt bob, glass-smooth lengths, a graphic line of liner. Sharp where it matters, quiet everywhere else.',
     image: '/img/look-modern.jpg',
-    palette: { base: '#EFEDE9', surface: '#D8D4CE', text: '#141413', accent: '#8C8378' },
+    palette: { base: 'rgba(14, 12, 11, 0.9)', surface: 'rgba(142, 134, 121, 0.2)', text: '#F2EBDD', accent: '#BBA883' },
     typeStyle: { tracking: '-0.02em', italic: false },
     services: ['haircut', 'hair-colour', 'brows', 'makeup'],
   },
@@ -336,7 +336,7 @@ export const LOOKS: Look[] = [
     description:
       'Volume, copper and a deep berry lip. For the evenings you want to be remembered for.',
     image: '/img/look-bold.jpg',
-    palette: { base: '#1A1714', surface: '#2A2420', text: '#F7F3EC', accent: '#C8A87C' },
+    palette: { base: 'rgba(22, 10, 9, 0.91)', surface: 'rgba(145, 54, 43, 0.21)', text: '#F7EADF', accent: '#D7A866' },
     typeStyle: { tracking: '0.01em', italic: true },
     services: ['hair-colour', 'highlights', 'makeup', 'lashes'],
   },
@@ -346,8 +346,8 @@ export const LOOKS: Look[] = [
     subtitle: 'Undone · Radiant',
     description:
       'Air-dried texture, a warm gloss, bare skin with a lit-from-within finish. Nothing heavy, nothing hidden.',
-    image: '/img/look-natural.jpg',
-    palette: { base: '#F3EDE3', surface: '#E2D7C6', text: '#26221C', accent: '#B08D5E' },
+    image: '/img/gallery-1.jpg',
+    palette: { base: 'rgba(14, 12, 10, 0.89)', surface: 'rgba(175, 143, 96, 0.2)', text: '#F3EBDD', accent: '#C7A36A' },
     typeStyle: { tracking: '0.03em', italic: false },
     services: ['hair-treatment', 'facial', 'brows', 'pre-bridal'],
   },

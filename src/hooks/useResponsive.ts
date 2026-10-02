@@ -36,7 +36,18 @@ export type DeviceTier = 'high' | 'medium' | 'low'
  * simpler scene than drop frames on someone's three-year-old phone.
  */
 export function useDeviceTier(): DeviceTier {
-  const [tier, setTier] = useState<DeviceTier>('high')
+  const [tier, setTier] = useState<DeviceTier>(() => {
+    if (typeof window === 'undefined') return 'high'
+    const nav = navigator as Navigator & { deviceMemory?: number; hardwareConcurrency?: number }
+    const cores = nav.hardwareConcurrency ?? 4
+    const memory = nav.deviceMemory ?? 8
+    const compact = Math.min(window.innerWidth, window.innerHeight) < 500
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return 'low'
+    if (cores <= 3 || memory <= 3) return compact || coarse ? 'low' : 'medium'
+    return compact || coarse ? 'medium' : 'high'
+  })
 
   useEffect(() => {
     const nav = navigator as Navigator & { deviceMemory?: number; hardwareConcurrency?: number }

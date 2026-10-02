@@ -91,8 +91,8 @@ export function Transformation() {
       <div className="container-editorial">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
-            index="03"
-            eyebrow="Gallery — The Transformation"
+            index="04"
+            eyebrow="The transformation"
             lines={['Drag to see', <em key="b" className="italic text-brass">the difference.</em>]}
           />
           <Reveal delay={0.2} className="max-w-xs lg:pb-2">

@@ -28,15 +28,15 @@ export function Products({ tier }: { tier: DeviceTier }) {
       <div className="container-editorial">
         <SectionHeading
           index="06"
-          eyebrow="The Shelf"
-          lines={['What we use', <em key="b" className="italic text-brass">in the chair.</em>]}
-          intro="A short list, chosen for how it performs on Indian hair and humidity. Turn one over — literally."
+          eyebrow="Objects of devotion"
+          lines={['The ritual', <em key="b" className="italic text-brass">continues at home.</em>]}
+          intro="A rare edit of professional formulations, chosen for the way they perform in Indian hair and humidity. Turn each object over in the light."
         />
 
         <div ref={ref} className="mt-14 grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-16">
           {/* Stage */}
           <div className="relative order-2 lg:order-1">
-            <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-b from-sand/70 via-porcelain to-ivory sm:aspect-[4/3] lg:aspect-square">
+            <div className="royal-product-plinth relative aspect-square w-full overflow-hidden sm:aspect-[4/3] lg:aspect-square">
               {webgl && inView && (
                 <CanvasBoundary fallback={null} onError={() => setWebgl(false)}>
                   <Suspense fallback={null}>
@@ -60,7 +60,7 @@ export function Products({ tier }: { tier: DeviceTier }) {
               </motion.div>
 
               <p className="pointer-events-none absolute left-5 top-5 font-sans text-[10px] uppercase tracking-label text-taupe/70">
-                Drag to rotate
+                Turn the object in the light
               </p>
             </div>
           </div>
