@@ -41,6 +41,10 @@ npm run preview
 
 Requires Node 18+.
 
+## Public demo deployment
+
+`.github/workflows/deploy-pages.yml` builds and publishes to GitHub Pages on pushes to `main` and the active Arena branch. The repository must have Pages enabled with **Build and deployment → Source: GitHub Actions**. The project build uses `/3rd3d-web/` as its Pages base path; the public URL is `https://abhay0069.github.io/3rd3d-web/` once the deployment succeeds.
+
 ## Project map
 
 ```text
