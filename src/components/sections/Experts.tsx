@@ -1,3 +1,4 @@
+import { assetUrl } from '../../lib/assets'
 import { motion } from 'framer-motion'
 import { EXPERTS } from '../../data/salon'
 import { useBooking } from '../../store/booking'
@@ -92,7 +93,7 @@ export function About() {
           <Reveal>
             <div className="relative aspect-[4/5] overflow-hidden bg-sand">
               <img
-                src="/img/salon-bridal-suite.jpg"
+                src={assetUrl('/img/salon-bridal-suite.jpg')}
                 alt="The curtained bridal suite at LUMIÈRE, with a chaise, arch mirror and silk curtains"
                 loading="lazy"
                 decoding="async"

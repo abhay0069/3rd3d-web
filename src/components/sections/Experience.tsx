@@ -1,3 +1,4 @@
+import { assetUrl } from '../../lib/assets'
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { HOTSPOTS, type Hotspot } from '../../data/salon'
@@ -8,9 +9,9 @@ import { SectionHeading } from '../ui/Bits'
 import { Reveal } from '../ui/Reveal'
 
 const PLATES = [
-  { id: 'wide' as const, label: 'The Floor', src: '/img/salon-interior-wide.jpg', alt: 'The main styling floor' },
-  { id: 'colour' as const, label: 'Colour Studio', src: '/img/salon-color-studio.jpg', alt: 'The colour mixing studio' },
-  { id: 'bridal' as const, label: 'Bridal Suite', src: '/img/salon-bridal-suite.jpg', alt: 'The private bridal suite' },
+  { id: 'wide' as const, label: 'The Floor', src: assetUrl('/img/salon-interior-wide.jpg'), alt: 'The main styling floor' },
+  { id: 'colour' as const, label: 'Colour Studio', src: assetUrl('/img/salon-color-studio.jpg'), alt: 'The colour mixing studio' },
+  { id: 'bridal' as const, label: 'Bridal Suite', src: assetUrl('/img/salon-bridal-suite.jpg'), alt: 'The private bridal suite' },
 ]
 
 /**

@@ -1,3 +1,4 @@
+import { assetUrl } from '../../lib/assets'
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import type { DeviceTier } from '../../hooks/useResponsive'
@@ -56,7 +57,7 @@ export function FaceSection({ tier }: { tier: DeviceTier }) {
           style={{ opacity: reduced ? 1 : photoOpacity }}
         >
           <img
-            src="/img/face-particles.jpg"
+            src={assetUrl('/img/face-particles.jpg')}
             alt="A LUMIÈRE client, lit against a dark studio backdrop — the portrait the particles resolve into"
             className="h-full w-full object-cover object-center opacity-70 sm:opacity-80"
             loading="lazy"
@@ -72,7 +73,7 @@ export function FaceSection({ tier }: { tier: DeviceTier }) {
         {showParticles && (
           <Suspense fallback={null}>
             <FaceParticles
-              src="/img/face-particles.jpg"
+              src={assetUrl('/img/face-particles.jpg')}
               tier={tier}
               reduced={Boolean(reduced)}
               containerRef={containerRef}

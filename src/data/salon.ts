@@ -1,3 +1,5 @@
+import { assetUrl } from '../lib/assets'
+
 /**
  * LUMIÈRE — site content.
  *
@@ -89,10 +91,10 @@ export const CATEGORIES: Category[] = [
 ]
 
 const IMG = {
-  hair: '/img/service-hair.jpg',
-  beauty: '/img/service-beauty.jpg',
-  bridal: '/img/service-bridal.jpg',
-  detail: '/img/gallery-1.jpg',
+  hair: assetUrl('/img/service-hair.jpg'),
+  beauty: assetUrl('/img/service-beauty.jpg'),
+  bridal: assetUrl('/img/service-bridal.jpg'),
+  detail: assetUrl('/img/gallery-1.jpg'),
 }
 
 export const SERVICES: Service[] = [
@@ -266,7 +268,7 @@ export const EXPERTS: Expert[] = [
     experience: '12+ years',
     specialty: 'Precision cutting · Colour architecture',
     bio: 'Trained in London and Milan, Arjun builds shapes around how hair moves — never around a trend board. He leads our cutting and colour education.',
-    image: '/img/expert-1.jpg',
+    image: assetUrl('/img/expert-1.jpg'),
     services: ['hair'],
   },
   {
@@ -276,7 +278,7 @@ export const EXPERTS: Expert[] = [
     experience: '9 years',
     specialty: 'Advanced skin · Corrective facials',
     bio: 'A clinical aesthetician by training, Meera reads skin before she treats it. Her protocols are slow, evidence-led and results you can see in daylight.',
-    image: '/img/expert-2.jpg',
+    image: assetUrl('/img/expert-2.jpg'),
     services: ['beauty'],
   },
   {
@@ -286,7 +288,7 @@ export const EXPERTS: Expert[] = [
     experience: '8 years',
     specialty: 'Bridal hair · Editorial makeup',
     bio: 'Anaya has dressed over two hundred brides. She plans a wedding look backwards from the last photograph of the night, so nothing moves.',
-    image: '/img/expert-3.jpg',
+    image: assetUrl('/img/expert-3.jpg'),
     services: ['bridal', 'beauty'],
   },
 ]
@@ -313,7 +315,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Timeless · Polished',
     description:
       'A glossy blowout, a low chignon, skin that looks like skin. Elegant at forty as it was at twenty.',
-    image: '/img/look-classic.jpg',
+    image: assetUrl('/img/look-classic.jpg'),
     palette: { base: 'rgba(12, 9, 8, 0.9)', surface: 'rgba(166, 118, 67, 0.22)', text: '#F4EADD', accent: '#D5B273' },
     typeStyle: { tracking: '0.02em', italic: false },
     services: ['haircut', 'hair-styling', 'hair-colour', 'makeup'],
@@ -324,7 +326,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Architectural · Clean',
     description:
       'A blunt bob, glass-smooth lengths, a graphic line of liner. Sharp where it matters, quiet everywhere else.',
-    image: '/img/look-modern.jpg',
+    image: assetUrl('/img/look-modern.jpg'),
     palette: { base: 'rgba(14, 12, 11, 0.9)', surface: 'rgba(142, 134, 121, 0.2)', text: '#F2EBDD', accent: '#BBA883' },
     typeStyle: { tracking: '-0.02em', italic: false },
     services: ['haircut', 'hair-colour', 'brows', 'makeup'],
@@ -335,7 +337,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Dramatic · Warm',
     description:
       'Volume, copper and a deep berry lip. For the evenings you want to be remembered for.',
-    image: '/img/look-bold.jpg',
+    image: assetUrl('/img/look-bold.jpg'),
     palette: { base: 'rgba(22, 10, 9, 0.91)', surface: 'rgba(145, 54, 43, 0.21)', text: '#F7EADF', accent: '#D7A866' },
     typeStyle: { tracking: '0.01em', italic: true },
     services: ['hair-colour', 'highlights', 'makeup', 'lashes'],
@@ -346,7 +348,7 @@ export const LOOKS: Look[] = [
     subtitle: 'Undone · Radiant',
     description:
       'Air-dried texture, a warm gloss, bare skin with a lit-from-within finish. Nothing heavy, nothing hidden.',
-    image: '/img/gallery-1.jpg',
+    image: assetUrl('/img/gallery-1.jpg'),
     palette: { base: 'rgba(14, 12, 10, 0.89)', surface: 'rgba(175, 143, 96, 0.2)', text: '#F3EBDD', accent: '#C7A36A' },
     typeStyle: { tracking: '0.03em', italic: false },
     services: ['hair-treatment', 'facial', 'brows', 'pre-bridal'],
@@ -356,8 +358,8 @@ export const LOOKS: Look[] = [
 /* ── Before / After ───────────────────────────────────────────────────── */
 
 export const TRANSFORMATION = {
-  before: '/img/before.jpg',
-  after: '/img/after.jpg',
+  before: assetUrl('/img/before.jpg'),
+  after: assetUrl('/img/after.jpg'),
   beforeAlt:
     'Before: dry, flat, unstyled hair photographed in cool, unflattering consultation light',
   afterAlt:

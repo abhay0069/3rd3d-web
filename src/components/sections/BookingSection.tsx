@@ -1,3 +1,4 @@
+import { assetUrl } from '../../lib/assets'
 import { SITE } from '../../data/salon'
 import { BookingFlow } from '../booking/BookingFlow'
 import { SectionHeading } from '../ui/Bits'
@@ -43,7 +44,7 @@ export function BookingSection() {
           <aside className="flex flex-col justify-between gap-9">
             <div className="relative aspect-[5/4] overflow-hidden border border-champagne/30 bg-[#17100D]">
               <img
-                src="/img/salon-color-studio.jpg"
+                src={assetUrl('/img/salon-color-studio.jpg')}
                 alt="Amber glass, brass bowls and folded towels in the LUMIÈRE colour studio"
                 loading="lazy"
                 decoding="async"
